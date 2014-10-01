@@ -13,11 +13,16 @@
 
     },
     "require-dev": {
-
+        "phpunit/phpunit": "4.2.*"
     },
     "autoload": {
         "psr-4": {
-            "Salesforce\\Api\\": "src/"
+            "Salesforce\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Salesforce\\Tests\\": "tests/"
         }
     }
 }
