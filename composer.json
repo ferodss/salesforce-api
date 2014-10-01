@@ -1,0 +1,23 @@
+{
+    "name": "ferodss/salesforce-api",
+    "type": "library",
+    "description": "Salesforce API",
+    "homepage": "https://github.com/ferodss/salesforce-api",
+    "keywords": ["salesforce", "api"],
+    "license": "",
+    "authors": [{
+        "name": "Felipe Rodrigues",
+        "homepage": "http://ferodss.github.io"
+    }],
+    "require": {
+
+    },
+    "require-dev": {
+
+    },
+    "autoload": {
+        "psr-4": {
+            "Salesforce\\Api\\": "src/"
+        }
+    }
+}
