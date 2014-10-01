@@ -9,6 +9,11 @@ class Client
 {
 
     /**
+     * Supported API version
+     */
+    const API_VERSION = 'v32.0';
+
+    /**
      * HttpClient used to communicate with Salesforce
      *
      * @var HttpClientInterface
