@@ -16,7 +16,7 @@ class Client
     /**
      * Supported API version
      */
-    const API_VERSION = '24.0';
+    const API_VERSION = '32.0';
 
     /**
      * @var string

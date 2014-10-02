@@ -12,14 +12,16 @@ interface SoapClientInterface
     /**
      * Logs in to the login server and starts a client session
      *
-     * @param string $login    Salesforce username
+     * @param string $username Salesforce username
      * @param string $password Salesforce password
      * @param string $token    Salesforce security token
      *
      * @link http://www.salesforce.com/us/developer/docs/api/Content/sforce_api_calls_login.htm
      *
      * @return Result\LoginResult
+     *
+     * @throws \SoapFault
      */
-    public function authenticate($login, $password, $token);
+    public function authenticate($username, $password, $token);
 
 } 
