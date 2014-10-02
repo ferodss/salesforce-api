@@ -11,7 +11,7 @@ class ApiFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testShouldGetApiInstance($apiName, $class)
     {
-        $this->assertInstanceOf($class, ApiFactory::getApi($apiName));
+        $this->assertInstanceOf($class, ApiFactory::factory($apiName));
     }
 
     public function getApiClassesProvider()
