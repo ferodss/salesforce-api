@@ -160,7 +160,14 @@ class JobTest extends \PHPUnit_Framework_TestCase
         $job = new Job('SomeObject');
         $xml = $job->asXML();
 
-        $expectedXml = '<?xml version="1.0"?><jobInfo xmlns="http://www.force.com/2009/06/asyncapi/dataload"><operation>insert</operation><object>SomeObject</object><concurrencyMode>Parallel</concurrencyMode></jobInfo>';
+        $expectedXml = '<?xml version="1.0"?>
+                <jobInfo xmlns="http://www.force.com/2009/06/asyncapi/dataload">
+                    <operation>insert</operation>
+                    <object>SomeObject</object>
+                    <concurrencyMode>Parallel</concurrencyMode>
+                    <contentType>XML</contentType>
+                </jobInfo>
+        ';
 
         $this->assertXmlStringEqualsXmlString($expectedXml, $xml);
     }
