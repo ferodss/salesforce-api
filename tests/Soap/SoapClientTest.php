@@ -23,7 +23,7 @@ class SoapClientTest extends \PHPUnit_Framework_TestCase
         $client = new SoapClient($soapClient);
         $result = $client->authenticate($username, $password, $token);
 
-        $this->assertEquals($result, $loginResult);
+        $this->assertEquals($result, $loginResult->result);
     }
 
     public function getSoapClientMock()
