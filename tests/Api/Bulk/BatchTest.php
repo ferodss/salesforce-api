@@ -6,12 +6,11 @@ use Salesforce\Api\Bulk\Batch;
 class BatchTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function testShouldBeAbleToSetDataOnConstructor()
+    public function testShouldImplementsXMLSerializable()
     {
-        $data = ['name' => 'Foo Bar'];
-        $batch = new Batch($data);
+        $batch = new Batch();
 
-        $this->assertEquals($data, $batch->getData());
+        $this->assertInstanceOf('Salesforce\Api\Bulk\XMLSerializable', $batch);
     }
 
     public function testShouldBeAbleToNotSetDataOnConstructor()
@@ -21,14 +20,45 @@ class BatchTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($batch->getData());
     }
 
-    public function testShouldBeAbleToSetDataAfterConstructor()
+    public function testShouldBeAbleToAddData()
     {
-        $data = ['name' => 'Foo Bar'];
+        $data = $this->getMock('Salesforce\Api\Bulk\Batch\BatchData');
 
         $batch = new Batch();
-        $batch->setData($data);
+        $batch->addData($data);
 
-        $this->assertEquals($data, $batch->getData());
+        $batchData = $batch->getData();
+
+        $this->assertEquals(1, count($batchData));
+        $this->assertEquals($data, $batchData[0]);
+    }
+
+    public function testShouldGetAXMLString()
+    {
+        $batch = new Batch();
+        $xml = $batch->asXML();
+
+        $this->assertTrue(is_string($xml));
+    }
+
+    public function testShouldGetAXmlStringWithBatchData()
+    {
+        $data = $this->getMock('Salesforce\Api\Bulk\Batch\BatchData');
+        $data->expects($this->once())
+            ->method('getData')
+            ->will($this->returnValue(['customerName' => 'Xpto']));
+
+        $batch = new Batch();
+        $batch->addData($data);
+
+        $xml = $batch->asXML();
+        $expectedXml = '<?xml version="1.0"?>
+            <sObjects xmlns="http://www.force.com/2009/06/asyncapi/dataload">
+                <sObject><customerName>Xpto</customerName></sObject>
+            </sObjects>
+        ';
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $xml);
     }
 
 }
