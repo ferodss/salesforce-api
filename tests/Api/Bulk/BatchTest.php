@@ -22,7 +22,7 @@ class BatchTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldBeAbleToAddData()
     {
-        $data = $this->getMock('Salesforce\Api\Bulk\Batch\BatchData');
+        $data = ['name' => 'FooBar'];
 
         $batch = new Batch();
         $batch->addData($data);
@@ -43,10 +43,7 @@ class BatchTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldGetAXmlStringWithBatchData()
     {
-        $data = $this->getMock('Salesforce\Api\Bulk\Batch\BatchData');
-        $data->expects($this->once())
-            ->method('getData')
-            ->will($this->returnValue(['customerName' => 'Xpto']));
+        $data = ['name' => 'FooBar'];
 
         $batch = new Batch();
         $batch->addData($data);
@@ -54,7 +51,7 @@ class BatchTest extends \PHPUnit_Framework_TestCase
         $xml = $batch->asXML();
         $expectedXml = '<?xml version="1.0"?>
             <sObjects xmlns="http://www.force.com/2009/06/asyncapi/dataload">
-                <sObject><customerName>Xpto</customerName></sObject>
+                <sObject><name>FooBar</name></sObject>
             </sObjects>
         ';
 
