@@ -1,6 +1,8 @@
 <?php
 namespace Salesforce\Soap;
 
+use Salesforce\Soap\Exception\LoginFaultException;
+
 /**
  * SOAP client interface used for the Salesforce API client
  *
@@ -20,8 +22,19 @@ interface SoapClientInterface
      *
      * @return Result\LoginResult
      *
-     * @throws \SoapFault
+     * @throws LoginFaultException
      */
     public function authenticate($username, $password, $token);
+
+    /**
+     * Sets the location of the Web service to use
+     *
+     * @link http://php.net/manual/en/soapclient.setlocation.php
+     *
+     * @param string $new_location [optional]    The new endpoint URL.
+     *
+     * @return string The old endpoint URL.
+     */
+    public function __setLocation($location);
 
 } 
