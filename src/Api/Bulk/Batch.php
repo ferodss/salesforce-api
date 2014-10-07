@@ -12,11 +12,71 @@ class Batch implements XMLSerializable
 {
 
     /**
+     * The Batch ID
+     *
+     * @var string
+     */
+    protected $id;
+
+    /**
+     * The Batch state
+     *
+     * @var string
+     */
+    protected $state;
+
+    /**
      * Batch data
      *
      * @var AbstractObject[]
      */
     protected $data = [];
+
+    /**
+     * Set the Batch ID
+     *
+     * @param string $id
+     *
+     * @return Batch
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the Batch ID
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the Batch state
+     *
+     * @param string $state
+     *
+     * @return Batch
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
 
     /**
      * Add batch object data to the jobs batch
@@ -55,7 +115,9 @@ class Batch implements XMLSerializable
             $sObject = $xml->addChild('sObject');
 
             foreach ($object->asArray() as $name => $value) {
-                $sObject->addChild($name, $value);
+                if (! empty($value)) {
+                    $sObject->addChild($name, $value);
+                }
             }
         }
 

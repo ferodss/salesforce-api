@@ -40,6 +40,11 @@ class Job implements XMLSerializable
     const OPERATION_INSERT = 'insert';
 
     /**
+     * @var string
+     */
+    protected $id;
+
+    /**
      * The object type for the data being processed
      * All data in a job must be of a single object type
      *
@@ -128,6 +133,30 @@ class Job implements XMLSerializable
     {
         $this->object = $object;
         $this->setOperation($operation);
+    }
+
+    /**
+     * Set the Job id
+     *
+     * @param $id
+     *
+     * @return Job
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the Job id
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -330,7 +359,7 @@ class Job implements XMLSerializable
     public function asXML()
     {
         $this->xml = new \SimpleXMLElement("<jobInfo xmlns=\"http://www.force.com/2009/06/asyncapi/dataload\"/>");
-        $this->xml->id = '';
+        $this->xml->id = $this->getId();
         $this->xml->operation = $this->getOperation();
         $this->xml->object = $this->getObject();
         $this->xml->state = $this->getState();
