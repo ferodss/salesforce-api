@@ -12,18 +12,18 @@ class Batch implements XMLSerializable
     /**
      * Batch data
      *
-     * @var Batch\BatchData[]
+     * @var array
      */
     protected $data = [];
 
     /**
      * Add batch data to the jobs batch
      *
-     * @param Batch\BatchData $data
+     * @param array $data
      *
      * @return Batch
      */
-    public function addData(Batch\BatchData $data)
+    public function addData(array $data)
     {
         $this->data[] = $data;
 
@@ -33,7 +33,7 @@ class Batch implements XMLSerializable
     /**
      * Returns all jobs batches
      *
-     * @return Batch\BatchData[]
+     * @return array[]
      */
     public function getData()
     {
@@ -52,7 +52,7 @@ class Batch implements XMLSerializable
         foreach ($this->data as $batchData) {
             $sObject = $xml->addChild('sObject');
 
-            foreach ($batchData->getData() as $name => $value) {
+            foreach ($batchData as $name => $value) {
                 $sObject->addChild($name, $value);
             }
         }
