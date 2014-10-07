@@ -4,7 +4,7 @@
     "description": "Salesforce API",
     "homepage": "https://github.com/ferodss/salesforce-api",
     "keywords": ["salesforce", "api"],
-    "license": "",
+    "license": "MIT",
     "authors": [{
         "name": "Felipe Rodrigues",
         "homepage": "http://ferodss.github.io"
