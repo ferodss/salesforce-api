@@ -6,6 +6,7 @@ use Salesforce\Api\Bulk;
 class BulkTest extends \PHPUnit_Framework_TestCase
 {
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $client;
 
     protected function setUp()
@@ -43,5 +44,26 @@ class BulkTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($job, $bulkApi->getJob());
     }
 
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testShouldBeAuthenticatedToFlush()
+    {
+        $bulkApi = new Bulk($this->client);
+        $bulkApi->flush();
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testShouldHaveJobToFlush()
+    {
+        $this->client->expects($this->once())
+            ->method('isAuthenticated')
+            ->willReturn(true);
+
+        $bulkApi = new Bulk($this->client);
+        $bulkApi->flush();
+    }
 }
  

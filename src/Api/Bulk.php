@@ -3,6 +3,7 @@ namespace Salesforce\Api;
 
 use Salesforce\Client;
 use Salesforce\Api\Bulk\Job;
+use Salesforce\HttpClient\Message\ResponseMediator;
 
 /**
  * Salesforce Bulk API wrapper
@@ -20,6 +21,11 @@ class Bulk
     protected $client;
 
     /**
+     * @var \Salesforce\HttpClient\HttpClientInterface
+     */
+    protected $httpClient;
+
+    /**
      * Current bulk job
      *
      * @var Job
@@ -34,6 +40,7 @@ class Bulk
     public function __construct(Client $client)
     {
         $this->client = $client;
+        $this->httpClient = $client->getHttpClient();
     }
 
     /**
@@ -87,20 +94,49 @@ class Bulk
             throw new \RuntimeException('You must be authenticated!');
         }
 
-        $httpClient = $this->client->getHttpClient();
-        $httpClient->setHeaders($this->client->getRestAuthorizationHeader());
+        if (! ($this->job instanceof Job)) {
+            throw new \LogicException('You must set a Job for this bulk');
+        }
 
-        // Flush the Job
-        // @TODO Parse Job create result to Job object
+        $this->httpClient->setHeaders($this->client->getRestAuthorizationHeader());
+
+        $this->flushJob();
+        $this->flushBatches();
+    }
+
+    /**
+     * Flush the Job
+     *
+     * @return void
+     */
+    protected function flushJob()
+    {
         switch ($this->job->getOperation()) {
             case Job::OPERATION_INSERT:
-                $httpClient->post('job', $this->job->asXML());
+                $response = $this->httpClient->post('job', $this->job->asXML());
                 break;
         }
 
-        // Flush all job batches
-        foreach ($this->job->getBatches() as $batch) {
-            $httpClient->post("job/{$this->job->getId()}/batch", $batch->asXML());
+        $response = ResponseMediator::getContent($response);
+
+        // @TODO Parse Job create result to Job object
+        $this->job->setId($response->id);
+    }
+
+    /**
+     * Flush all job batches
+     *
+     * @return void
+     */
+    protected function flushBatches()
+    {
+        $batches = $this->job->getBatches();
+        foreach ($batches as $i => $batch) {
+            $response = $this->httpClient->post("job/{$this->job->getId()}/batch", $batch->asXML());
+            $response = ResponseMediator::getContent($response);
+
+            // @TODO Parse Batch create result to Batch object
+            $batches[$i]->setId($response->id);
         }
     }
 
