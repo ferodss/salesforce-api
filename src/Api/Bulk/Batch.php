@@ -1,6 +1,8 @@
 <?php
 namespace Salesforce\Api\Bulk;
 
+use Salesforce\Objects\AbstractObject;
+
 /**
  * Bulk API Job Batch representation
  *
@@ -12,20 +14,20 @@ class Batch implements XMLSerializable
     /**
      * Batch data
      *
-     * @var array
+     * @var AbstractObject[]
      */
     protected $data = [];
 
     /**
-     * Add batch data to the jobs batch
+     * Add batch object data to the jobs batch
      *
-     * @param array $data
+     * @param AbstractObject $object
      *
      * @return Batch
      */
-    public function addData(array $data)
+    public function addObject(AbstractObject $object)
     {
-        $this->data[] = $data;
+        $this->data[] = $object;
 
         return $this;
     }
@@ -33,7 +35,7 @@ class Batch implements XMLSerializable
     /**
      * Returns all jobs batches
      *
-     * @return array[]
+     * @return AbstractObject[]
      */
     public function getData()
     {
@@ -49,10 +51,10 @@ class Batch implements XMLSerializable
     {
         $xml = new \SimpleXMLElement("<sObjects xmlns=\"http://www.force.com/2009/06/asyncapi/dataload\"/>");
 
-        foreach ($this->data as $batchData) {
+        foreach ($this->data as $object) {
             $sObject = $xml->addChild('sObject');
 
-            foreach ($batchData as $name => $value) {
+            foreach ($object->asArray() as $name => $value) {
                 $sObject->addChild($name, $value);
             }
         }

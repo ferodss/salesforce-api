@@ -20,17 +20,17 @@ class BatchTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($batch->getData());
     }
 
-    public function testShouldBeAbleToAddData()
+    public function testShouldBeAbleToAddObject()
     {
-        $data = ['name' => 'FooBar'];
+        $object = $this->getObjectMock();
 
         $batch = new Batch();
-        $batch->addData($data);
+        $batch->addObject($object);
 
         $batchData = $batch->getData();
 
         $this->assertEquals(1, count($batchData));
-        $this->assertEquals($data, $batchData[0]);
+        $this->assertEquals($object, $batchData[0]);
     }
 
     public function testShouldGetAXMLString()
@@ -43,19 +43,29 @@ class BatchTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldGetAXmlStringWithBatchData()
     {
-        $data = ['name' => 'FooBar'];
+        $object = $this->getObjectMock();
+        $object->expects(($this->once()))
+            ->method('asArray')
+            ->willReturn(['Name' => 'FooBar']);
 
         $batch = new Batch();
-        $batch->addData($data);
+        $batch->addObject($object);
 
         $xml = $batch->asXML();
         $expectedXml = '<?xml version="1.0"?>
             <sObjects xmlns="http://www.force.com/2009/06/asyncapi/dataload">
-                <sObject><name>FooBar</name></sObject>
+                <sObject><Name>FooBar</Name></sObject>
             </sObjects>
         ';
 
         $this->assertXmlStringEqualsXmlString($expectedXml, $xml);
+    }
+
+    protected function getObjectMock()
+    {
+        return $this->getMockBuilder('Salesforce\Objects\AbstractObject')
+            ->setMethods(['asArray', 'getObjectType'])
+            ->getMock();
     }
 
 }
