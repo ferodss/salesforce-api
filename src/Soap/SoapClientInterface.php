@@ -35,6 +35,6 @@ interface SoapClientInterface
      *
      * @return string The old endpoint URL.
      */
-    public function __setLocation($location);
+    public function setLocation($location);
 
 } 

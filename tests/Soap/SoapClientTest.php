@@ -6,6 +6,20 @@ use Salesforce\Soap\SoapClient;
 class SoapClientTest extends \PHPUnit_Framework_TestCase
 {
 
+    public function testShouldRecieveSoapClientOnConstructor()
+    {
+        $soapClient = $this->getSoapClientMock();
+        $client = new SoapClient($soapClient);
+    }
+
+    public function testShouldImplementsSoapClientInterface()
+    {
+        $soapClient = $this->getSoapClientMock();
+        $client = new SoapClient($soapClient);
+
+        $this->assertInstanceOf('Salesforce\Soap\SoapClientInterface', $client);
+    }
+
     public function testShouldReturnLoginResult()
     {
         $username = 'foo@bar.com';
@@ -26,9 +40,22 @@ class SoapClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $loginResult->result);
     }
 
+    public function testShouldBeAbleToChangeSoapLocation()
+    {
+        $location = 'http://foo.com';
+
+        $soapClient = $this->getSoapClientMock();
+        $soapClient->expects($this->once())
+            ->method('__setLocation')
+            ->with($location);
+
+        $client = new SoapClient($soapClient);
+        $client->setLocation($location);
+    }
+
     public function getSoapClientMock()
     {
-        $methods = ['login'];
+        $methods = ['login', '__setLocation'];
 
         return $this->getMockBuilder('\SoapClient')
             ->setMethods($methods)

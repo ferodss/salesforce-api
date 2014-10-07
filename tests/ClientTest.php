@@ -71,7 +71,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function getSoapClientMock()
     {
         $methods = [
-            'authenticate', '__setLocation'
+            'authenticate', 'setLocation'
         ];
 
         return $this->getMockBuilder('Salesforce\Soap\SoapClientInterface')

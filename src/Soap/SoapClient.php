@@ -47,7 +47,7 @@ class SoapClient implements SoapClientInterface
     /**
      * {@inheritDoc}
      */
-    public function __setLocation($location)
+    public function setLocation($location)
     {
         return $this->soapClient->__setLocation($location);
     }

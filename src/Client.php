@@ -225,7 +225,7 @@ class Client
      */
     protected function setSoapEndPoint()
     {
-        $this->soapClient->__setLocation($this->loginResult->getServerUrl());
+        $this->soapClient->setLocation($this->loginResult->getServerUrl());
     }
 
 } 
