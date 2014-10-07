@@ -19,7 +19,7 @@ class HttpClient implements HttpClientInterface
     protected $options = [
         'base_url'   => '',
         'timeout'    => 10,
-        'user_agent' => 'PHP Salesforce API'
+        'user_agent' => 'PHP Salesforce API',
     ];
 
     /**
@@ -43,7 +43,9 @@ class HttpClient implements HttpClientInterface
 
         $client = $client ?: new GuzzleClient([
             'base_url' => $this->options['base_url'],
-            'defaults' => $this->options
+            'defaults' => [
+                'headers' => $this->options
+            ]
         ]);
 
         $this->client = $client;
@@ -79,6 +81,14 @@ class HttpClient implements HttpClientInterface
     public function setHeaders(array $headers)
     {
         $this->headers = array_merge($this->headers, $headers);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
     }
 
     /**

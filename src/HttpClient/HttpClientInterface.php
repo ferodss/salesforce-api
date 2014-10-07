@@ -63,5 +63,11 @@ interface HttpClientInterface
      */
     public function setHeaders(array $headers);
 
+    /**
+     * Get HTTP headers
+     *
+     * @return array
+     */
+    public function getHeaders();
 
 } 
