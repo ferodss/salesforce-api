@@ -27,7 +27,7 @@ class Client
      *
      * @var string
      */
-    const REST_ENDPOINT_PATTERN = 'https://%s.salesforce.com/services/async/%s';
+    const REST_ENDPOINT_PATTERN = 'https://%s.salesforce.com/services/async/%s/';
 
     /**
      * Session header name for authorization
