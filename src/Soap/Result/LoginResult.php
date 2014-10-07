@@ -80,17 +80,17 @@ class LoginResult
      */
     public function getServerInstance()
     {
-        if (null === $this->serverUrl) {
+        if (null === $this->getServerUrl()) {
             throw new \UnexpectedValueException('Server URL must be set');
         }
 
         $match = preg_match(
-            '/https:\/\/(?<instance>[^-\.]+)/',
-            $this->serverUrl,
+            '/https:\/\/(?<instance>.+).salesforce.com/',
+            $this->getServerUrl(),
             $matches
         );
 
-        if (!$match || !isset($matches['instance'])) {
+        if (! $match || ! isset($matches['instance'])) {
             throw new \RuntimeException('Server instance could not be determined');
         }
 
