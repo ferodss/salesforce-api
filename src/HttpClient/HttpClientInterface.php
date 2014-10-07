@@ -15,7 +15,7 @@ interface HttpClientInterface
      * @param string $path    Request path
      * @param mixed  $body    Request body
      *
-     * @return mixed
+     * @return \GuzzleHttp\Message\ResponseInterface
      *
      * @throws \LogicException
      */
@@ -28,7 +28,7 @@ interface HttpClientInterface
      * @param mixed  $body          Request body
      * @param string $httpMethod    HTTP method to use
      *
-     * @return mixed
+     * @return \GuzzleHttp\Message\ResponseInterface
      *
      * @throws \LogicException
      */
