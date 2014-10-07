@@ -75,9 +75,20 @@ class Account extends AbstractObject
     /**
      * {@inheritDoc}
      */
-    public function asXML()
+    public function getObjectType()
     {
-        // ...
+        return 'Account';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function asArray()
+    {
+        return [
+            'Phone'        => $this->getPhone(),
+            'RecordTypeId' => $this->getRedordTypeId(),
+        ];
     }
 
 } 

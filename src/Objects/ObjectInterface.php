@@ -9,4 +9,13 @@ namespace Salesforce\Objects;
 interface ObjectInterface
 {
 
+    /**
+     * Returns the Salesforce object type
+     *
+     * @see https://www.salesforce.com/us/developer/docs/api/Content/sforce_api_objects_list.htm
+     *
+     * @return string
+     */
+    public function getObjectType();
+
 } 

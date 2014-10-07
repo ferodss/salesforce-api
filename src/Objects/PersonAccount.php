@@ -168,7 +168,7 @@ class PersonAccount extends Account
     /**
      * {@inheritDoc}
      */
-    public function asXML()
+    public function asArray()
     {
         // ...
     }
