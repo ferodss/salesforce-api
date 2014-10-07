@@ -1,11 +1,11 @@
 <?php
 namespace Salesforce\Api;
 
-use Salesforce\Api\Bulk\Batch;
+use Salesforce\Client;
 use Salesforce\Api\Bulk\Job;
 
 /**
- * Bulk API wrapper
+ * Salesforce Bulk API wrapper
  *
  * @author Felipe Rodrigues <lfrs.web@gmail.com>
  */
@@ -13,11 +13,28 @@ class Bulk
 {
 
     /**
+     * Salesforce API client
+     *
+     * @var Client
+     */
+    protected $client;
+
+    /**
      * Current bulk job
      *
      * @var Job
      */
     protected $job;
+
+    /**
+     * Instantiate a new Salesforce Bulk API
+     *
+     * @param Client $client
+     */
+    public function __construct(Client $client)
+    {
+        $this->client = $client;
+    }
 
     /**
      * Create a new job and set it as bulk's job
@@ -30,7 +47,7 @@ class Bulk
     {
         $this->setJob(new Job($object));
 
-        return $this->getJob();
+        return $this->job;
     }
 
     /**
@@ -58,13 +75,33 @@ class Bulk
     }
 
     /**
-     * Create a new batch
+     * Flush the Job to the Salesforce
      *
-     * @return Batch
+     * @return void
+     *
+     * @throws \RuntimeException
      */
-    public function createBatch()
+    public function flush()
     {
-        return new Batch();
+        if (! $this->client->isAuthenticated()) {
+            throw new \RuntimeException('You must be authenticated!');
+        }
+
+        $httpClient = $this->client->getHttpClient();
+        $httpClient->setHeaders($this->client->getRestAuthorizationHeader());
+
+        // Flush the Job
+        // @TODO Parse Job create result to Job object
+        switch ($this->job->getOperation()) {
+            case Job::OPERATION_INSERT:
+                $httpClient->post('job', $this->job->asXML());
+                break;
+        }
+
+        // Flush all job batches
+        foreach ($this->job->getBatches() as $batch) {
+            $httpClient->post("job/{$this->job->getId()}/batch", $batch->asXML());
+        }
     }
 
 }
