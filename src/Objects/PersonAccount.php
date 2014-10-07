@@ -170,7 +170,15 @@ class PersonAccount extends Account
      */
     public function asArray()
     {
-        // ...
+        $data = parent::asArray();
+
+        return array_merge($data, [
+            'FirstName'         => $this->getFirstName(),
+            'LastName'          => $this->getLastName(),
+            'PersonBirthDate'   => $this->getPersonBirthDate(),
+            'PersonEmail'       => $this->getPersonEmail(),
+            'PersonMobilePhone' => $this->getPersonMobilePhone(),
+        ]);
     }
 
 } 
