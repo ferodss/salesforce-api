@@ -8,6 +8,32 @@ namespace Salesforce\HttpClient;
  */
 interface HttpClientInterface
 {
+
+    /**
+     * Send a POST request
+     *
+     * @param string $path    Request path
+     * @param mixed  $body    Request body
+     *
+     * @return mixed
+     *
+     * @throws \LogicException
+     */
+    public function post($path, $body = null);
+
+    /**
+     * Send a request to the server
+     *
+     * @param string $path          Request path
+     * @param mixed  $body          Request body
+     * @param string $httpMethod    HTTP method to use
+     *
+     * @return mixed
+     *
+     * @throws \LogicException
+     */
+    public function request($path, $body = null, $httpMethod = 'GET');
+
     /**
      * Change an option value
      *
@@ -29,4 +55,13 @@ interface HttpClientInterface
      * @return mixed
      */
     public function getOption($option, $default = null);
+
+    /**
+     * Set HTTP headers
+     *
+     * @param array $headers
+     */
+    public function setHeaders(array $headers);
+
+
 } 
