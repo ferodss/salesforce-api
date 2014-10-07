@@ -99,8 +99,9 @@ class HttpClient implements HttpClientInterface
     public function clearHeaders()
     {
         $this->headers = [
-            'Accept'     => 'application/xml',
-            'User-Agent' => $this->options['user_agent'],
+            'Accept'       => 'application/xml',
+            'Content-Type' => 'application/xml',
+            'User-Agent'   => $this->options['user_agent'],
         ];
     }
 
