@@ -43,10 +43,15 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $httpClient = $this->getHttpClientMock();
 
+        $loginResult = $this->getLoginResultMock();
+        $loginResult->method('getServerUrl')
+            ->willReturn('https://cs21.salesforce.com/services/Soap/c/32.0/');
+
         $soapClient = $this->getSoapClientMock();
         $soapClient->expects($this->once())
             ->method('authenticate')
-            ->with($login, $password, $token);
+            ->with($login, $password, $token)
+            ->willReturn($loginResult);
 
         $client = new Client($this->getWSDLPath(), $httpClient);
         $client->setSoapClient($soapClient);
@@ -57,7 +62,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function getHttpClientMock()
     {
         $methods = [
-            'setOption', 'getOption', 'authenticate'
+            'post', 'request', 'setOption', 'getOption', 'setHeaders'
         ];
 
         return $this->getMock('Salesforce\HttpClient\HttpClientInterface', $methods);
@@ -66,13 +71,24 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function getSoapClientMock()
     {
         $methods = [
-            'authenticate'
+            'authenticate', '__setLocation'
         ];
 
         return $this->getMockBuilder('Salesforce\Soap\SoapClientInterface')
             ->setMethods($methods)
             ->disableOriginalConstructor()
             ->setConstructorArgs([$this->getWSDLPath()])
+            ->getMock();
+    }
+
+    public function getLoginResultMock()
+    {
+        $methods = [
+            'getServerUrl', 'getSessionId',
+        ];
+
+        return $this->getMockBuilder('Salesforce\Soap\Result\LoginResult')
+            ->setMethods($methods)
             ->getMock();
     }
 

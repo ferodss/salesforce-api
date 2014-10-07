@@ -1,12 +1,14 @@
 <?php
 namespace Salesforce;
 
+use Salesforce\Api\Bulk;
 use Salesforce\HttpClient\HttpClient;
 use Salesforce\HttpClient\HttpClientInterface;
-use Salesforce\Api\ApiFactory;
+use Salesforce\Exception\LoginFaultException;
+use Salesforce\Soap\Result\LoginResult;
 
 /**
- * Class Client
+ * Salesforce API Client
  *
  * @author Felipe Rodrigues <lfrs.web@gmail.com>
  */
@@ -14,9 +16,25 @@ class Client
 {
 
     /**
-     * Supported API version
+     * Supported Salesforce API version
+     *
+     * @var string
      */
     const API_VERSION = '32.0';
+
+    /**
+     * Salesforce REST API endpoint
+     *
+     * @var string
+     */
+    const REST_ENDPOINT_PATTERN = 'https://%s.salesforce.com/services/async/%s';
+
+    /**
+     * Session header name for authorization
+     *
+     * @var string
+     */
+    const REST_SESSION_HEADER = 'X-SFDC-Session';
 
     /**
      * @var string
@@ -29,11 +47,21 @@ class Client
     protected $soapClient;
 
     /**
+     * @var LoginResult
+     */
+    protected $loginResult;
+
+    /**
      * HttpClient used to communicate with Salesforce
      *
      * @var HttpClientInterface
      */
     protected $httpClient;
+
+    /**
+     * @var string
+     */
+    protected $restEndpoint;
 
     /**
      * Instantiate a new Salesforce client
@@ -43,8 +71,11 @@ class Client
      */
     public function __construct($wsdl, HttpClientInterface $httpClient = null)
     {
-        $this->wsdl       = $wsdl;
-        $this->httpClient = $httpClient ?: $this->getHttpClient();
+        $this->wsdl = $wsdl;
+
+        if (null !== $httpClient) {
+            $this->httpClient = $httpClient;
+        }
     }
 
     /**
@@ -56,7 +87,20 @@ class Client
      */
     public function api($name)
     {
-        return ApiFactory::factory($name);
+        switch ($name) {
+            case 'bulk':
+                $api = new Bulk($this);
+                break;
+
+            default:
+                throw new \InvalidArgumentException(sprintf(
+                    'Undefined API instance called: "%s"',
+                    $name
+                ));
+                break;
+        }
+
+        return $api;
     }
 
     /**
@@ -67,10 +111,41 @@ class Client
      * @param string $token
      *
      * @return Soap\Result\LoginResult
+     *
+     * @throws LoginFaultException
      */
     public function authenticate($login, $password, $token)
     {
-        return $this->getSoapClient()->authenticate($login, $password, $token);
+        $loginResult = $this->getSoapClient()->authenticate($login, $password, $token);
+        $this->setLoginResult($loginResult);
+
+        return $loginResult;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAuthenticated()
+    {
+        return ! empty($this->loginResult);
+    }
+
+    /**
+     * Get current session id through Salesforce SOAP API
+     *
+     * @return string
+     */
+    public function getSessionId()
+    {
+        return $this->getLoginResult()->getSessionId();
+    }
+
+    /**
+     * @return array
+     */
+    public function getRestAuthorizationHeader()
+    {
+        return [Client::REST_SESSION_HEADER => $this->getSessionId()];
     }
 
     /**
@@ -81,7 +156,9 @@ class Client
     public function getHttpClient()
     {
         if (null === $this->httpClient) {
-            $this->httpClient = new HttpClient();
+            $this->httpClient = new HttpClient([
+                'base_url' => $this->restEndpoint,
+            ]);
         }
 
         return $this->httpClient;
@@ -109,6 +186,46 @@ class Client
         }
 
         return $this->soapClient;
+    }
+
+    /**
+     * @param LoginResult $loginResult
+     */
+    protected function setLoginResult(LoginResult $loginResult)
+    {
+        $this->loginResult = $loginResult;
+
+        $this->setSoapEndPoint();
+        $this->setRestEndopint();
+    }
+
+    /**
+     * Get login result from SOAP client
+     *
+     * @return LoginResult
+     */
+    protected function getLoginResult()
+    {
+        return $this->loginResult;
+    }
+
+    /**
+     * @return void
+     */
+    protected function setRestEndopint()
+    {
+        $this->restEndpoint = sprintf(self::REST_ENDPOINT_PATTERN,
+            $this->getLoginResult()->getServerInstance(),
+            self::API_VERSION
+        );
+    }
+
+    /**
+     * @return void
+     */
+    protected function setSoapEndPoint()
+    {
+        $this->soapClient->__setLocation($this->loginResult->getServerUrl());
     }
 
 } 
