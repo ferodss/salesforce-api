@@ -1,6 +1,8 @@
 <?php
 namespace Salesforce\Api\Bulk;
 
+use Salesforce\Objects\AbstractObject;
+
 /**
  * Bulk API Job class representation
  *
@@ -29,6 +31,13 @@ class Job implements XMLSerializable
      * @var string
      */
     const CONTENT_TYPE_XML = 'XML';
+
+    /**
+     * Operation type insert
+     *
+     * @var string
+     */
+    const OPERATION_INSERT = 'insert';
 
     /**
      * The object type for the data being processed
@@ -72,7 +81,7 @@ class Job implements XMLSerializable
      * @var array
      */
     protected $validOperations = [
-        'insert',
+        self::OPERATION_INSERT,
     ];
 
     /**
@@ -98,7 +107,7 @@ class Job implements XMLSerializable
     ];
 
     /**
-     * @var array
+     * @var Batch[]
      */
     protected $batches = [];
 
@@ -115,7 +124,7 @@ class Job implements XMLSerializable
      * @param string $object     The object type for the data
      * @param string $operation  The processing operation
      */
-    public function __construct($object, $operation = 'insert')
+    public function __construct($object, $operation = self::OPERATION_INSERT)
     {
         $this->object = $object;
         $this->setOperation($operation);
@@ -270,27 +279,47 @@ class Job implements XMLSerializable
     }
 
     /**
-     * Add a batch to the job
-     *
-     * @param Batch $batch
-     *
-     * @return Job
-     */
-    public function addBatch(Batch $batch)
-    {
-        $this->batches[] = $batch;
-
-        return $this;
-    }
-
-    /**
      * Get all job batches
      *
-     * @return array
+     * @return Batch[]
      */
     public function getBatches()
     {
         return $this->batches;
+    }
+
+    /**
+     * Add an Salesforce object to the Job
+     *
+     * @param AbstractObject $object
+     *
+     * @return Job
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function addObject(AbstractObject $object)
+    {
+        if ($this->getObject() != $object->getObjectType()) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Object type \"%s\" don't match with Job object type \"%s\"",
+                    $object->getObjectType(),
+                    $this->getObject()
+                )
+            );
+        }
+
+        if (empty($this->batches)) {
+            $batch = new Batch();
+            $batch->addObject($object);
+
+            $this->batches[] = $batch;
+        } else {
+            $i = count($this->batches) - 1;
+            $this->batches[$i]->addObject($object);
+        }
+
+        return $this;
     }
 
     /**

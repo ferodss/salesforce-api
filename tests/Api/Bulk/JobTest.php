@@ -15,7 +15,7 @@ class JobTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldHaveToSetObjectOnConstructor()
     {
-        $object = 'SomeObject';
+        $object = 'Account';
         $job = new Job($object);
 
         $this->assertEquals($object, $job->getObject());
@@ -34,7 +34,7 @@ class JobTest extends \PHPUnit_Framework_TestCase
      */
     public function testShouldThrowsExceptionWithInvalidOperation()
     {
-        $job = new Job('SomeObject');
+        $job = new Job('Account');
         $job->setOperation('foooooooo');
     }
 
@@ -43,7 +43,7 @@ class JobTest extends \PHPUnit_Framework_TestCase
      */
     public function testShoulBeAbleToSetState($state)
     {
-        $job = new Job('SomeObject');
+        $job = new Job('Account');
         $job->setState($state);
 
         $this->assertEquals($state, $job->getState());
@@ -64,16 +64,16 @@ class JobTest extends \PHPUnit_Framework_TestCase
      */
     public function testShouldThrowsExceptionWithInvalidState()
     {
-        $job = new Job('SomeObject');
+        $job = new Job('Account');
         $job->setState('SomeInvalidState');
     }
 
     /**
      * @dataProvider jobConcurrencyModeDataProvider
      */
-    public function testShoulBeAbleToSetConcurrencyMode($concurrencyMode)
+    public function testShouldBeAbleToSetConcurrencyMode($concurrencyMode)
     {
-        $job = new Job('SomeObject');
+        $job = new Job('Account');
         $job->setConcurrencyMode($concurrencyMode);
 
         $this->assertEquals($concurrencyMode, $job->getConcurrencyMode());
@@ -89,14 +89,14 @@ class JobTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldHaveADefaultConcurrencyMode()
     {
-        $job = new Job('SomeObject');
+        $job = new Job('Account');
 
         $this->assertNotEmpty($job->getConcurrencyMode());
     }
 
     public function testShoulBeAbleToSetContentType()
     {
-        $job = new Job('SomeObject');
+        $job = new Job('Account');
         $job->setContentType(Job::CONTENT_TYPE_XML);
 
         $this->assertEquals(Job::CONTENT_TYPE_XML, $job->getContentType());
@@ -104,7 +104,7 @@ class JobTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldHaveADefaultContentType()
     {
-        $job = new Job('SomeObject');
+        $job = new Job('Account');
 
         $this->assertNotEmpty($job->getContentType());
     }
@@ -114,42 +114,58 @@ class JobTest extends \PHPUnit_Framework_TestCase
      */
     public function testShouldThrowsExceptionWithInvalidContentType()
     {
-        $job = new Job('SomeObject');
+        $job = new Job('Account');
         $job->setContentType('SomeInvalidContentType');
     }
 
     public function testBatchesShouldBeEmptyOnCreateAJob()
     {
-        $job = new Job('SomeObject');
+        $job = new Job('Account');
 
         $this->assertEmpty($job->getBatches());
     }
 
-    public function testShouldBeAbleToAddBatch()
+    public function testShouldBeAbleToAddObject()
     {
-        $batch = $this->getBatchMock();
+        $account = $this->getObjectMock();
+        $account->expects($this->once())
+            ->method('getObjectType')
+            ->willReturn('Account');
 
-        $job = new Job('SomeObject');
-        $job->addBatch($batch);
+        $job = new Job('Account');
+        $job->addObject($account);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testShouldThrowsExceptionOnAddWrongObjectType()
+    {
+        $account = $this->getObjectMock();
+        $account->expects($this->exactly(2))
+            ->method('getObjectType')
+            ->willReturn('Foo');
+
+        $job = new Job('Account');
+        $job->addObject($account);
+    }
+
+    public function testShouldHaveBatch()
+    {
+        $account = $this->getObjectMock();
+        $account->expects($this->once())
+            ->method('getObjectType')
+            ->willReturn('Account');
+
+        $job = new Job('Account');
+        $job->addObject($account);
 
         $this->assertNotEmpty($job->getBatches());
     }
 
-    public function testShouldBeAbleToAddMultipleBatches()
-    {
-        $batch1 = $this->getBatchMock();
-        $batch2 = $this->getBatchMock();
-
-        $job = new Job('SomeObject');
-        $job->addBatch($batch1)
-            ->addBatch($batch2);
-
-        $this->assertEquals(2, count($job->getBatches()));
-    }
-
     public function testShouldGetAXMLString()
     {
-        $job = new Job('SomeObject');
+        $job = new Job('Account');
         $xml = $job->asXML();
 
         $this->assertTrue(is_string($xml));
@@ -157,13 +173,13 @@ class JobTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldClearEmptyXMLAttributes()
     {
-        $job = new Job('SomeObject');
+        $job = new Job('Account');
         $xml = $job->asXML();
 
         $expectedXml = '<?xml version="1.0"?>
                 <jobInfo xmlns="http://www.force.com/2009/06/asyncapi/dataload">
                     <operation>insert</operation>
-                    <object>SomeObject</object>
+                    <object>Account</object>
                     <concurrencyMode>Parallel</concurrencyMode>
                     <contentType>XML</contentType>
                 </jobInfo>
@@ -179,6 +195,12 @@ class JobTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
+    protected function getObjectMock()
+    {
+        return $this->getMockBuilder('Salesforce\Objects\AbstractObject')
+            ->setMethods(['asArray', 'getObjectType'])
+            ->getMock();
+    }
 
 }
  
