@@ -175,7 +175,7 @@ class PersonAccount extends Account
         return array_merge($data, [
             'FirstName'         => $this->getFirstName(),
             'LastName'          => $this->getLastName(),
-            'PersonBirthDate'   => $this->getPersonBirthDate(),
+            'PersonBirthDate'   => $this->getPersonBirthDate()->format('Y-m-d'),
             'PersonEmail'       => $this->getPersonEmail(),
             'PersonMobilePhone' => $this->getPersonMobilePhone(),
         ]);
