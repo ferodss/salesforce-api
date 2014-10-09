@@ -132,13 +132,20 @@ class Job extends XmlEntity
     protected $batches = [];
 
     /**
+     * @var Batch
+     */
+    protected $currentBatch;
+
+    /**
      * Instantiate a new bulk job
      *
-     * @param string $object     The object type for the data
-     * @param string $operation  The processing operation
+     * @param string $object The object type for the data
+     * @param string $operation The processing operation
      */
     public function __construct($object, $operation = self::OPERATION_INSERT)
     {
+        $this->addNewBatch();
+
         $this->object = $object;
         $this->setOperation($operation);
     }
@@ -191,7 +198,7 @@ class Job extends XmlEntity
     {
         $operation = strtolower($operation);
 
-        if (! in_array($operation, $this->validOperations)) {
+        if (!in_array($operation, $this->validOperations)) {
             throw new \InvalidArgumentException(sprintf(
                 '"%s" operation is not an valid operation',
                 $operation
@@ -224,7 +231,7 @@ class Job extends XmlEntity
      */
     public function setState($state)
     {
-        if (! in_array($state, $this->validStates)) {
+        if (!in_array($state, $this->validStates)) {
             throw new \InvalidArgumentException(sprintf(
                 '"%s" state is not an valid job state',
                 $state
@@ -257,7 +264,7 @@ class Job extends XmlEntity
      */
     public function setConcurrencyMode($concurrencyMode)
     {
-        if (! in_array($concurrencyMode, $this->validConcurrencyModes)) {
+        if (!in_array($concurrencyMode, $this->validConcurrencyModes)) {
             throw new \InvalidArgumentException(sprintf(
                 '"%s" concurrency mode is not an valid job concurrency mode',
                 $concurrencyMode
@@ -346,6 +353,20 @@ class Job extends XmlEntity
     }
 
     /**
+     * Get current Job Batch
+     *
+     * @return Batch
+     */
+    public function getCurrentBatch()
+    {
+        if (! $this->currentBatch->isInApiLimit()) {
+            $this->addNewBatch();
+        }
+
+        return $this->currentBatch;
+    }
+
+    /**
      * Add an Salesforce object to the Job
      *
      * @param AbstractObject $object
@@ -366,15 +387,7 @@ class Job extends XmlEntity
             );
         }
 
-        if (empty($this->batches)) {
-            $batch = new Batch();
-            $batch->addObject($object);
-
-            $this->batches[] = $batch;
-        } else {
-            $i = count($this->batches) - 1;
-            $this->batches[$i]->addObject($object);
-        }
+        $this->getCurrentBatch()->addObject($object);
 
         return $this;
     }
@@ -398,6 +411,19 @@ class Job extends XmlEntity
         $this->clearEmptyXMLData();
 
         return $this->xml->asXML();
+    }
+
+    /**
+     * Create a new Batch for this Job and set it as current Batch
+     *
+     * @return Batch
+     */
+    protected function addNewBatch()
+    {
+        $this->currentBatch = new Batch();
+        $this->batches[] = $this->currentBatch;
+
+        return $this->currentBatch;
     }
 
 }

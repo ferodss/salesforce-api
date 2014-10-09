@@ -130,11 +130,11 @@ class JobTest extends \PHPUnit_Framework_TestCase
         $job->setContentType('SomeInvalidContentType');
     }
 
-    public function testBatchesShouldBeEmptyOnCreateAJob()
+    public function testShouldCreateBatchOnCreateJob()
     {
         $job = new Job('Account');
 
-        $this->assertEmpty($job->getBatches());
+        $this->assertNotEmpty($job->getBatches());
     }
 
     public function testShouldBeAbleToAddObject()
@@ -160,19 +160,6 @@ class JobTest extends \PHPUnit_Framework_TestCase
 
         $job = new Job('Account');
         $job->addObject($account);
-    }
-
-    public function testShouldHaveBatch()
-    {
-        $account = $this->getObjectMock();
-        $account->expects($this->once())
-            ->method('getObjectType')
-            ->willReturn('Account');
-
-        $job = new Job('Account');
-        $job->addObject($account);
-
-        $this->assertNotEmpty($job->getBatches());
     }
 
     public function testShouldGetAXMLString()
