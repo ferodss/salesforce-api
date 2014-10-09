@@ -12,6 +12,15 @@ class Batch extends XmlEntity
 {
 
     /**
+     * Maximum number of records that may be updated or created per call
+     *
+     * @see https://developer.salesforce.com/docs/atlas.en-us.192.0.api_asynch.meta/api_asynch/asynch_api_concepts_limits.htm
+     *
+     * @var int
+     */
+    protected $batchSizeLimit = 200;
+
+    /**
      * The Batch ID
      *
      * @var string
@@ -100,6 +109,38 @@ class Batch extends XmlEntity
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * Set maximum number of records that may be updated or created per call
+     *
+     * @param int $batchSizeLimit
+     */
+    public function setBatchSizeLimit($batchSizeLimit)
+    {
+        $this->batchSizeLimit = $batchSizeLimit;
+
+        return $this;
+    }
+
+    /**
+     * Get maximum number of records that may be updated or created per call
+     *
+     * @return int
+     */
+    public function getBatchSizeLimit()
+    {
+        return $this->batchSizeLimit;
+    }
+
+    /**
+     * Check if this Batch is in size limit by Bulk API
+     *
+     * @return bool
+     */
+    public function isInApiLimit()
+    {
+        return (count($this->data) <= $this->batchSizeLimit);
     }
 
     /**

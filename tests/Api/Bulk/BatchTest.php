@@ -34,6 +34,38 @@ class BatchTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($object, $batchData[0]);
     }
 
+    public function testShouldBeAbleToSetBatchApiLimit()
+    {
+        $batch = new Batch();
+        $batch->setBatchSizeLimit(10);
+
+        $this->assertEquals(10, $batch->getBatchSizeLimit());
+    }
+
+    public function testShoulBeInBatchApiLimit()
+    {
+        $batch = new Batch();
+        $batch->setBatchSizeLimit(10);
+
+        for ($i = 0; $i < 10; $i++) {
+            $batch->addObject($this->getObjectMock());
+        }
+
+        $this->assertTrue($batch->isInApiLimit());
+    }
+
+    public function testShoulNotBeInBatchApiLimit()
+    {
+        $batch = new Batch();
+        $batch->setBatchSizeLimit(4);
+
+        for ($i = 0; $i < 5; $i++) {
+            $batch->addObject($this->getObjectMock());
+        }
+
+        $this->assertFalse($batch->isInApiLimit());
+    }
+
     public function testShouldGetAXMLString()
     {
         $batch = new Batch();
