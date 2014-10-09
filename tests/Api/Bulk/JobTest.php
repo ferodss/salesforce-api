@@ -99,11 +99,11 @@ class JobTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testShouldHaveADefaultConcurrencyMode()
+    public function testShouldHaventADefaultConcurrencyMode()
     {
         $job = new Job('Account');
 
-        $this->assertNotEmpty($job->getConcurrencyMode());
+        $this->assertEmpty($job->getConcurrencyMode());
     }
 
     public function testShoulBeAbleToSetContentType()
@@ -192,7 +192,6 @@ class JobTest extends \PHPUnit_Framework_TestCase
                 <jobInfo xmlns="http://www.force.com/2009/06/asyncapi/dataload">
                     <operation>insert</operation>
                     <object>Account</object>
-                    <concurrencyMode>Parallel</concurrencyMode>
                     <contentType>XML</contentType>
                 </jobInfo>
         ';
