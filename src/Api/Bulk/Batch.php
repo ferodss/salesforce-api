@@ -8,7 +8,7 @@ use Salesforce\Objects\AbstractObject;
  *
  * @author Felipe Rodrigues <lfrs.web@gmail.com>
  */
-class Batch implements XMLSerializable
+class Batch extends XmlEntity
 {
 
     /**

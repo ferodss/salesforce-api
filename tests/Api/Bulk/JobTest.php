@@ -6,11 +6,12 @@ use Salesforce\Api\Bulk\Job;
 class JobTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function testShouldImplementsXMLSerializable()
+    public function testShouldBeXmlEntity()
     {
         $job = new Job('Account');
 
-        $this->assertInstanceOf('Salesforce\Api\Bulk\XMLSerializable', $job);
+        $this->assertInstanceOf('Salesforce\Api\Bulk\XmlEntity', $job);
+        $this->assertInstanceOf('Salesforce\Api\Bulk\XmlSerializable', $job);
     }
 
     public function testShouldHaveToSetObjectOnConstructor()
@@ -197,6 +198,28 @@ class JobTest extends \PHPUnit_Framework_TestCase
         ';
 
         $this->assertXmlStringEqualsXmlString($expectedXml, $xml);
+    }
+
+    public function testShouldLoadDataFromXml()
+    {
+        $xml = new \SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?>
+            <jobInfo xmlns="http://www.force.com/2009/06/asyncapi/dataload">
+                <id>750D0000000002lIAA</id>
+                <operation>insert</operation>
+                <object>Account</object>
+                <createdById>005D0000001ALVFIA4</createdById>
+                <createdDate>2009-04-14T18:15:59.000Z</createdDate>
+                <systemModstamp>2009-04-14T18:15:59.000Z</systemModstamp>
+                <state>Open</state>
+                <contentType>XML</contentType>
+            </jobInfo>
+        ');
+
+        $job = new Job('Account');
+        $job->fromXml($xml);
+
+        $this->assertEquals('750D0000000002lIAA', $job->getId());
+        $this->assertEquals('Open', $job->getState());
     }
 
     public function getBatchMock()

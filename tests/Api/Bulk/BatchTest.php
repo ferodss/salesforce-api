@@ -6,10 +6,11 @@ use Salesforce\Api\Bulk\Batch;
 class BatchTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function testShouldImplementsXMLSerializable()
+    public function testShouldBeXmlEntity()
     {
         $batch = new Batch();
 
+        $this->assertInstanceOf('Salesforce\Api\Bulk\XmlEntity', $batch);
         $this->assertInstanceOf('Salesforce\Api\Bulk\XMLSerializable', $batch);
     }
 

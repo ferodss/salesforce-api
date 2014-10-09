@@ -118,13 +118,10 @@ class Bulk
             case Job::OPERATION_UPSERT:
                 $response = $this->httpClient->post('job', $this->job->asXML());
                 break;
-
         }
 
         $response = ResponseMediator::getContent($response);
-
-        // @TODO Parse Job create result to Job object
-        $this->job->setId($response->id);
+        $this->job->fromXml($response);
     }
 
     /**

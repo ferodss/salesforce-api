@@ -6,7 +6,7 @@ namespace Salesforce\Api\Bulk;
  *
  * @author Felipe Rodrigues <lfrs.web@gmail.com>
  */
-interface XMLSerializable
+interface XmlSerializable
 {
 
     /**
@@ -15,5 +15,14 @@ interface XMLSerializable
      * @return string
      */
     public function asXML();
+
+    /**
+     * Updates object attributes by given xml
+     *
+     * @param \SimpleXMLElement $xml
+     *
+     * @return void
+     */
+    public function fromXml(\SimpleXMLElement $xml);
 
 } 
