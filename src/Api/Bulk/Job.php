@@ -40,6 +40,13 @@ class Job implements XMLSerializable
     const OPERATION_INSERT = 'insert';
 
     /**
+     * Operation type upsert
+     *
+     * @var string
+     */
+    const OPERATION_UPSERT = 'upsert';
+
+    /**
      * @var string
      */
     protected $id;
@@ -81,12 +88,20 @@ class Job implements XMLSerializable
     protected $contentType;
 
     /**
+     * The name of the external ID field for an upsert
+     *
+     * @var string
+     */
+    protected $externalIdFieldName;
+
+    /**
      * Valid operations
      *
      * @var array
      */
     protected $validOperations = [
         self::OPERATION_INSERT,
+        self::OPERATION_UPSERT,
     ];
 
     /**
@@ -305,6 +320,30 @@ class Job implements XMLSerializable
         }
 
         return $this->contentType;
+    }
+
+    /**
+     * Set the name of the external ID field for an upsert
+     *
+     * @param string $externalIdFieldName
+     *
+     * @return Job
+     */
+    public function setExternalIdFieldName($externalIdFieldName)
+    {
+        $this->externalIdFieldName = $externalIdFieldName;
+
+        return $this;
+    }
+
+    /**
+     * Get the name of the external ID field for an upsert
+     *
+     * @return string
+     */
+    public function getExternalIdFieldName()
+    {
+        return $this->externalIdFieldName;
     }
 
     /**

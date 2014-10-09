@@ -21,12 +21,23 @@ class JobTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($object, $job->getObject());
     }
 
-    public function testShouldSetValidOperation()
+    /**
+     * @dataProvider operationDataProvider
+     */
+    public function testShouldSetValidOperation($operation)
     {
         $job = new Job('Account');
-        $job->setOperation($operation = 'insert');
+        $job->setOperation($operation);
 
         $this->assertEquals($operation, $job->getOperation());
+    }
+
+    public function operationDataProvider()
+    {
+        return [
+            [Job::OPERATION_INSERT],
+            [Job::OPERATION_UPSERT],
+        ];
     }
 
     /**

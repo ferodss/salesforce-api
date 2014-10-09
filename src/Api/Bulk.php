@@ -107,14 +107,18 @@ class Bulk
     /**
      * Flush the Job
      *
+     * @TODO Add validation before send request
+     *
      * @return void
      */
     protected function flushJob()
     {
         switch ($this->job->getOperation()) {
             case Job::OPERATION_INSERT:
+            case Job::OPERATION_UPSERT:
                 $response = $this->httpClient->post('job', $this->job->asXML());
                 break;
+
         }
 
         $response = ResponseMediator::getContent($response);
