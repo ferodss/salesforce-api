@@ -80,32 +80,6 @@ class JobTest extends \PHPUnit_Framework_TestCase
         $job->setState('SomeInvalidState');
     }
 
-    /**
-     * @dataProvider jobConcurrencyModeDataProvider
-     */
-    public function testShouldBeAbleToSetConcurrencyMode($concurrencyMode)
-    {
-        $job = new Job('Account');
-        $job->setConcurrencyMode($concurrencyMode);
-
-        $this->assertEquals($concurrencyMode, $job->getConcurrencyMode());
-    }
-
-    public function jobConcurrencyModeDataProvider()
-    {
-        return [
-            [Job::CONCURRENCY_MODE_PARALLEL],
-            [Job::CONCURRENCY_MODE_SERIAL],
-        ];
-    }
-
-    public function testShouldHaventADefaultConcurrencyMode()
-    {
-        $job = new Job('Account');
-
-        $this->assertEmpty($job->getConcurrencyMode());
-    }
-
     public function testShoulBeAbleToSetContentType()
     {
         $job = new Job('Account');

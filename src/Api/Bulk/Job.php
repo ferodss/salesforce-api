@@ -12,20 +12,6 @@ class Job extends XmlEntity
 {
 
     /**
-     * Process batches in parallel mode. This is the default value.
-     *
-     * @var string
-     */
-    const CONCURRENCY_MODE_PARALLEL = 'Parallel';
-
-    /**
-     * Process batches in serial mode
-     *
-     * @var string
-     */
-    const CONCURRENCY_MODE_SERIAL = 'Serial';
-
-    /**
      * XML data type
      *
      * @var string
@@ -74,13 +60,6 @@ class Job extends XmlEntity
     protected $state;
 
     /**
-     * The concurrency mode for the job
-     *
-     * @var string
-     */
-    protected $concurrencyMode;
-
-    /**
      * The content type for the job
      *
      * @var string
@@ -114,16 +93,6 @@ class Job extends XmlEntity
         'Close',
         'Aborted',
         'Failed',
-    ];
-
-    /**
-     * Valid concurrency modes for the job
-     *
-     * @var array
-     */
-    protected $validConcurrencyModes = [
-        self::CONCURRENCY_MODE_PARALLEL,
-        self::CONCURRENCY_MODE_SERIAL,
     ];
 
     /**
@@ -254,39 +223,6 @@ class Job extends XmlEntity
     }
 
     /**
-     * Set the concurrency mode for the job
-     *
-     * @param string $concurrencyMode
-     *
-     * @return Job
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function setConcurrencyMode($concurrencyMode)
-    {
-        if (!in_array($concurrencyMode, $this->validConcurrencyModes)) {
-            throw new \InvalidArgumentException(sprintf(
-                '"%s" concurrency mode is not an valid job concurrency mode',
-                $concurrencyMode
-            ));
-        }
-
-        $this->concurrencyMode = $concurrencyMode;
-
-        return $this;
-    }
-
-    /**
-     * Get the concurrency mode for the job
-     *
-     * @return string
-     */
-    public function getConcurrencyMode()
-    {
-        return $this->concurrencyMode;
-    }
-
-    /**
      * Set the content type for the job
      *
      * @param string $contentType
@@ -404,7 +340,6 @@ class Job extends XmlEntity
         $this->xml->operation = $this->getOperation();
         $this->xml->object = $this->getObject();
         $this->xml->state = $this->getState();
-        $this->xml->concurrencyMode = $this->getConcurrencyMode();
         $this->xml->externalIdFieldName = $this->getExternalIdFieldName();
         $this->xml->contentType = $this->getContentType();
 
