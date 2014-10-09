@@ -283,10 +283,6 @@ class Job extends XmlEntity
      */
     public function getConcurrencyMode()
     {
-        if (empty($this->concurrencyMode)) {
-            $this->concurrencyMode = self::CONCURRENCY_MODE_PARALLEL;
-        }
-
         return $this->concurrencyMode;
     }
 
@@ -403,6 +399,7 @@ class Job extends XmlEntity
         $this->xml->object = $this->getObject();
         $this->xml->state = $this->getState();
         $this->xml->concurrencyMode = $this->getConcurrencyMode();
+        $this->xml->externalIdFieldName = $this->getExternalIdFieldName();
         $this->xml->contentType = $this->getContentType();
 
         $this->clearEmptyXMLData();
