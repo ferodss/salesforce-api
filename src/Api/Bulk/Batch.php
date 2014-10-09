@@ -109,10 +109,10 @@ class Batch extends XmlEntity
      */
     public function asXML()
     {
-        $xml = new \SimpleXMLElement("<sObjects xmlns=\"http://www.force.com/2009/06/asyncapi/dataload\"/>");
+        $this->xml = new \SimpleXMLElement("<sObjects xmlns=\"http://www.force.com/2009/06/asyncapi/dataload\"/>");
 
         foreach ($this->data as $object) {
-            $sObject = $xml->addChild('sObject');
+            $sObject = $this->xml->addChild('sObject');
 
             foreach ($object->asArray() as $name => $value) {
                 if (! empty($value)) {
@@ -121,7 +121,7 @@ class Batch extends XmlEntity
             }
         }
 
-        return $xml->asXML();
+        return $this->xml->asXML();
     }
 
-} 
+}

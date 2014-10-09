@@ -62,6 +62,22 @@ class BatchTest extends \PHPUnit_Framework_TestCase
         $this->assertXmlStringEqualsXmlString($expectedXml, $xml);
     }
 
+    public function testShouldLoadDataFromXml()
+    {
+        $xml = new \SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?>
+            <batchInfo xmlns="http://www.force.com/2009/06/asyncapi/dataload">
+                <id>751x00000000079AAA</id>
+                <state>Queued</state>
+            </batchInfo>
+        ');
+
+        $batch = new Batch();
+        $batch->fromXml($xml);
+
+        $this->assertEquals('751x00000000079AAA', $batch->getId());
+        $this->assertEquals('Queued', $batch->getState());
+    }
+
     protected function getObjectMock()
     {
         return $this->getMockBuilder('Salesforce\Objects\AbstractObject')

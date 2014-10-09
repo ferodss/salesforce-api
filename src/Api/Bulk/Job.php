@@ -132,13 +132,6 @@ class Job extends XmlEntity
     protected $batches = [];
 
     /**
-     * XML representation of this Job
-     *
-     * @var \SimpleXMLElement
-     */
-    protected $xml;
-
-    /**
      * Instantiate a new bulk job
      *
      * @param string $object     The object type for the data
@@ -407,23 +400,4 @@ class Job extends XmlEntity
         return $this->xml->asXML();
     }
 
-    /**
-     * Remove empty fields to allow API to parse correctly
-     *
-     * @return void
-     */
-    protected function clearEmptyXMLData()
-    {
-        $emptyFields = [];
-        foreach ($this->xml as $field => $value) {
-            if ($value == '') {
-                $emptyFields[] = $field;
-            }
-        }
-
-        foreach ($emptyFields as $field) {
-            unset($this->xml->{$field});
-        }
-    }
-
-} 
+}

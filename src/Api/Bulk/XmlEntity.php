@@ -10,6 +10,13 @@ abstract class XmlEntity implements XmlSerializable
 {
 
     /**
+     * XML representation of this entity
+     *
+     * @var \SimpleXMLElement
+     */
+    protected $xml;
+
+    /**
      * {@inheritDoc}
      */
     abstract public function asXML();
@@ -29,6 +36,25 @@ abstract class XmlEntity implements XmlSerializable
             if (method_exists($this, $method)) {
                 call_user_func([$this, $method], (string) $xml->{$attr});
             }
+        }
+    }
+
+    /**
+     * Remove empty fields to allow API to parse correctly
+     *
+     * @return void
+     */
+    protected function clearEmptyXMLData()
+    {
+        $emptyFields = [];
+        foreach ($this->xml as $field => $value) {
+            if ($value == '') {
+                $emptyFields[] = $field;
+            }
+        }
+
+        foreach ($emptyFields as $field) {
+            unset($this->xml->{$field});
         }
     }
 

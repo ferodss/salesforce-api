@@ -86,7 +86,8 @@ class Bulk
      *
      * @return void
      *
-     * @throws \RuntimeException
+     * @throws \RuntimeException When user is not authenticated
+     * @throws \LogicException   When a job is not set
      */
     public function flush()
     {
@@ -134,10 +135,9 @@ class Bulk
         $batches = $this->job->getBatches();
         foreach ($batches as $i => $batch) {
             $response = $this->httpClient->post("job/{$this->job->getId()}/batch", $batch->asXML());
-            $response = ResponseMediator::getContent($response);
 
-            // @TODO Parse Batch create result to Batch object
-            $batches[$i]->setId($response->id);
+            $response = ResponseMediator::getContent($response);
+            $batches[$i]->fromXml($response);
         }
     }
 
