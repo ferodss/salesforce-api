@@ -140,7 +140,7 @@ class Batch extends XmlEntity
      */
     public function isInApiLimit()
     {
-        return (count($this->data) <= $this->batchSizeLimit);
+        return (count($this->data) < $this->batchSizeLimit);
     }
 
     /**
