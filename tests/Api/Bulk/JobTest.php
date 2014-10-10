@@ -136,6 +136,22 @@ class JobTest extends \PHPUnit_Framework_TestCase
         $job->addObject($account);
     }
 
+    public function testShouldDivideDataInBatches()
+    {
+        $job = new Job('Account');
+
+        for ($i = 0; $i < 201; $i++) {
+            $object = $this->getObjectMock();
+            $object->method('getObjectType')
+                ->willReturn('Account');
+
+            $job->addObject($object);
+        }
+
+        $this->assertGreaterThan(1, count($job->getBatches()));
+        $this->assertEquals(2, count($job->getBatches()));
+    }
+
     public function testShouldGetAXMLString()
     {
         $job = new Job('Account');

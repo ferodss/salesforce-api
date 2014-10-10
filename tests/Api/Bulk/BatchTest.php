@@ -45,9 +45,9 @@ class BatchTest extends \PHPUnit_Framework_TestCase
     public function testShoulBeInBatchApiLimit()
     {
         $batch = new Batch();
-        $batch->setBatchSizeLimit(10);
+        $batch->setBatchSizeLimit(5);
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 3; $i++) {
             $batch->addObject($this->getObjectMock());
         }
 
