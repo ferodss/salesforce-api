@@ -188,9 +188,9 @@ class Client
     public function getHttpClient()
     {
         if (null === $this->httpClient) {
-            $this->httpClient = new HttpClient([
+            $this->httpClient = new HttpClient(array(
                 'base_url' => $this->restEndpoint,
-            ]);
+            ));
         }
 
         return $this->httpClient;
