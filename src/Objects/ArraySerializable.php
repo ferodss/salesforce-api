@@ -16,4 +16,4 @@ interface ArraySerializable
      */
     public function asArray();
 
-} 
+}

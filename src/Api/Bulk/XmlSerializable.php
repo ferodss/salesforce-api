@@ -25,4 +25,4 @@ interface XmlSerializable
      */
     public function fromXml(\SimpleXMLElement $xml);
 
-} 
+}

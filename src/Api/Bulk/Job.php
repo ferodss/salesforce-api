@@ -78,27 +78,27 @@ class Job extends XmlEntity
      *
      * @var array
      */
-    protected $validOperations = [
+    protected $validOperations = array(
         self::OPERATION_INSERT,
         self::OPERATION_UPSERT,
-    ];
+    );
 
     /**
      * Valid job states
      *
      * @var array
      */
-    protected $validStates = [
+    protected $validStates = array(
         'Open',
         'Close',
         'Aborted',
         'Failed',
-    ];
+    );
 
     /**
      * @var Batch[]
      */
-    protected $batches = [];
+    protected $batches = array();
 
     /**
      * @var Batch

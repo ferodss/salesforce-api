@@ -29,30 +29,30 @@ class UserInfoResultTest extends \PHPUnit_Framework_TestCase
 
     public function userInfoDataProvider()
     {
-        return [
-            ['accessibilityMode', false],
-            ['currencySymbol', '$'],
-            ['orgAttachmentFileSizeLimit', '5242880'],
-            ['orgDefaultCurrencyIsoCode', 'USD'],
-            ['orgDisallowHtmlAttachments', false],
-            ['orgHasPersonAccounts', false],
-            ['organizationId', '00Do0000000biPkEAI'],
-            ['organizationMultiCurrency', 'false'],
-            ['organizationName', 'FooBar Company'],
-            ['profileId', '00eo0000000x7M5AAI'],
-            ['roleId', null],
-            ['sessionSecondsValid', 7200],
-            ['userDefaultCurrencyIsoCode', null],
-            ['userEmail', 'foo@bar.com'],
-            ['userFullName', 'Foo Bar'],
-            ['userId', '005o0000000zabaAAA'],
-            ['userLanguage', 'en_US'],
-            ['userLocale', 'en_US'],
-            ['userName', 'foo@bar.com'],
-            ['userTimeZone', 'UTC'],
-            ['userType', 'Standard'],
-            ['userUiSkin', 'Theme3'],
-        ];
+        return array(
+            array('accessibilityMode', false),
+            array('currencySymbol', '$'),
+            array('orgAttachmentFileSizeLimit', '5242880'),
+            array('orgDefaultCurrencyIsoCode', 'USD'),
+            array('orgDisallowHtmlAttachments', false),
+            array('orgHasPersonAccounts', false),
+            array('organizationId', '00Do0000000biPkEAI'),
+            array('organizationMultiCurrency', 'false'),
+            array('organizationName', 'FooBar Company'),
+            array('profileId', '00eo0000000x7M5AAI'),
+            array('roleId', null),
+            array('sessionSecondsValid', 7200),
+            array('userDefaultCurrencyIsoCode', null),
+            array('userEmail', 'foo@bar.com'),
+            array('userFullName', 'Foo Bar'),
+            array('userId', '005o0000000zabaAAA'),
+            array('userLanguage', 'en_US'),
+            array('userLocale', 'en_US'),
+            array('userName', 'foo@bar.com'),
+            array('userTimeZone', 'UTC'),
+            array('userType', 'Standard'),
+            array('userUiSkin', 'Theme3'),
+        );
     }
 
     protected function setProperty($property, $value)

@@ -14,10 +14,10 @@ class SoapClientFactory
      *
      * @var array
      */
-    protected static $classmap = [
+    protected static $classmap = array(
         'LoginResult'       => 'Salesforce\Soap\Result\LoginResult',
         'GetUserInfoResult' => 'Salesforce\Soap\Result\UserInfoResult',
-    ];
+    );
 
     /**
      * Factory a new configured SoapClient instance
@@ -28,13 +28,13 @@ class SoapClientFactory
      */
     public static function factory($wsdl)
     {
-        $soapClient = new \SoapClient($wsdl, [
+        $soapClient = new \SoapClient($wsdl, array(
             'trace'      => true,
             'exceptions' => true,
             'features'   => \SOAP_SINGLE_ELEMENT_ARRAYS,
             'classmap'   => self::$classmap,
             'cache_wsdl' => \WSDL_CACHE_MEMORY,
-        ]);
+        ));
 
         return new SoapClient($soapClient);
     }

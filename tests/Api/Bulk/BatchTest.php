@@ -79,7 +79,7 @@ class BatchTest extends \PHPUnit_Framework_TestCase
         $object = $this->getObjectMock();
         $object->expects(($this->once()))
             ->method('asArray')
-            ->willReturn(['Name' => 'FooBar']);
+            ->willReturn(array('Name' => 'FooBar'));
 
         $batch = new Batch();
         $batch->addObject($object);
@@ -113,7 +113,7 @@ class BatchTest extends \PHPUnit_Framework_TestCase
     protected function getObjectMock()
     {
         return $this->getMockBuilder('Salesforce\Objects\AbstractObject')
-            ->setMethods(['asArray', 'getObjectType'])
+            ->setMethods(array('asArray', 'getObjectType'))
             ->getMock();
     }
 

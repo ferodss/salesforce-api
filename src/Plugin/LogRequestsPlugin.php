@@ -81,11 +81,11 @@ class LogRequestsPlugin implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return [
+        return array(
             Events::CREATE_JOB   => 'onCreateJob',
             Events::CREATE_BATCH => 'onCreateBatch',
             Events::RESPONSE     => 'onClientResponse',
-        ];
+        );
     }
 
 }

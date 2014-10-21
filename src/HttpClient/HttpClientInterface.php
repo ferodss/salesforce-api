@@ -15,7 +15,7 @@ interface HttpClientInterface
      * @param string $path    Request path
      * @param mixed  $body    Request body
      *
-     * @return \GuzzleHttp\Message\ResponseInterface
+     * @return \Guzzle\Http\Message\Response
      *
      * @throws \LogicException
      */
@@ -28,7 +28,7 @@ interface HttpClientInterface
      * @param mixed  $body          Request body
      * @param string $httpMethod    HTTP method to use
      *
-     * @return \GuzzleHttp\Message\ResponseInterface
+     * @return \Guzzle\Http\Message\Response
      *
      * @throws \LogicException
      */
@@ -70,4 +70,4 @@ interface HttpClientInterface
      */
     public function getHeaders();
 
-} 
+}

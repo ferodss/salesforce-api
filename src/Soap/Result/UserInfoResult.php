@@ -227,4 +227,5 @@ class UserInfoResult
     {
         return $this->orgDefaultCurrencyIsoCode;
     }
+
 }

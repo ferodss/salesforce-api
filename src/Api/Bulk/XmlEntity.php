@@ -46,7 +46,7 @@ abstract class XmlEntity implements XmlSerializable
      */
     protected function clearEmptyXMLData()
     {
-        $emptyFields = [];
+        $emptyFields = array();
         foreach ($this->xml as $field => $value) {
             if ($value == '') {
                 $emptyFields[] = $field;

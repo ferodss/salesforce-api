@@ -18,4 +18,4 @@ interface ObjectInterface
      */
     public function getObjectType();
 
-} 
+}

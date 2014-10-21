@@ -9,7 +9,7 @@ class SoapClientTest extends \PHPUnit_Framework_TestCase
     public function testShouldRecieveSoapClientOnConstructor()
     {
         $soapClient = $this->getSoapClientMock();
-        $client = new SoapClient($soapClient);
+        new SoapClient($soapClient);
     }
 
     public function testShouldImplementsSoapClientInterface()
@@ -31,7 +31,7 @@ class SoapClientTest extends \PHPUnit_Framework_TestCase
         $soapClient = $this->getSoapClientMock();
         $soapClient->expects($this->once())
             ->method('login')
-            ->with(['username' => $username, 'password' => $password . $token])
+            ->with(array('username' => $username, 'password' => $password . $token))
             ->willReturn($loginResult);
 
         $client = new SoapClient($soapClient);
@@ -55,7 +55,7 @@ class SoapClientTest extends \PHPUnit_Framework_TestCase
 
     public function getSoapClientMock()
     {
-        $methods = ['login', '__setLocation'];
+        $methods = array('login', '__setLocation');
 
         return $this->getMockBuilder('\SoapClient')
             ->setMethods($methods)
@@ -66,9 +66,7 @@ class SoapClientTest extends \PHPUnit_Framework_TestCase
 
     public function getLoginResultMock()
     {
-        $methods = [
-            'getServerUrl', 'getSessionId',
-        ];
+        $methods = array('getServerUrl', 'getSessionId');
 
         $mock = $this->getMockBuilder('Salesforce\Soap\Result\LoginResult')
             ->setMethods($methods)

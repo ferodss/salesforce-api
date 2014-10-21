@@ -172,13 +172,13 @@ class PersonAccount extends Account
     {
         $data = parent::asArray();
 
-        return array_merge($data, [
+        return array_merge($data, array(
             'FirstName'         => $this->getFirstName(),
             'LastName'          => $this->getLastName(),
             'PersonBirthDate'   => $this->getPersonBirthDate()->format('Y-m-d'),
             'PersonEmail'       => $this->getPersonEmail(),
             'PersonMobilePhone' => $this->getPersonMobilePhone(),
-        ]);
+        ));
     }
 
-} 
+}

@@ -49,9 +49,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $client = $this->getBrowserMock();
 
         $httpClient = new HttpClient([], $client);
-        $response = $httpClient->post($path, $body);
-
-        $this->assertEquals(200, $response->getStatusCode());
+        $httpClient->post($path, $body);
     }
 
     public function testShouldDoCustomRequest()
@@ -62,20 +60,19 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $client = $this->getBrowserMock();
 
         $httpClient = new HttpClient([], $client);
-        $response = $httpClient->request($path, $body, 'HEAD');
-
-        $this->assertEquals(200, $response->getStatusCode());
+        $httpClient->request($path, $body, 'HEAD');
     }
 
     protected function getBrowserMock()
     {
-        $client = new \GuzzleHttp\Client(['base_url' => 'http://123.com/']);
-        $subscriber = new \GuzzleHttp\Subscriber\Mock([
-            new \GuzzleHttp\Message\Response(200, ['X-Foo' => 'Bar']),
-        ]);
+        $clientMock = $this->getMock('Guzzle\Http\Client', array(
+             'send', 'createRequest'
+        ));
 
-        $client->getEmitter()->attach($subscriber);
+        $clientMock->expects($this->any())
+            ->method('createRequest')
+            ->will($this->returnValue($this->getMock('Guzzle\Http\Message\Request', array(), array('GET', 'some'))));
 
-        return $client;
+        return $clientMock;
     }
 } 

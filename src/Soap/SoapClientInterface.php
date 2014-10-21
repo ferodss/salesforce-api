@@ -1,7 +1,7 @@
 <?php
 namespace Salesforce\Soap;
 
-use Salesforce\Soap\Exception\LoginFaultException;
+use Salesforce\Exception\LoginFaultException;
 
 /**
  * SOAP client interface used for the Salesforce API client
@@ -37,4 +37,4 @@ interface SoapClientInterface
      */
     public function setLocation($location);
 
-} 
+}

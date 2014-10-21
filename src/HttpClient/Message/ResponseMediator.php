@@ -1,7 +1,7 @@
 <?php
 namespace Salesforce\HttpClient\Message;
 
-use GuzzleHttp\Message\Response;
+use Guzzle\Http\Message\Response;
 
 /**
  * Class ResponseMediator

@@ -33,10 +33,10 @@ class SoapClient implements SoapClientInterface
     {
         try {
             // "login" is a web server' method
-            $result = $this->soapClient->login([
+            $result = $this->soapClient->login(array(
                 'username' => $username,
                 'password' => $password . $token
-            ]);
+            ));
         } catch (\SoapFault $e) {
             throw new LoginFaultException($e);
         }
@@ -52,4 +52,4 @@ class SoapClient implements SoapClientInterface
         return $this->soapClient->__setLocation($location);
     }
 
-} 
+}

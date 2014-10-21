@@ -85,10 +85,10 @@ class Account extends AbstractObject
      */
     public function asArray()
     {
-        return [
+        return array(
             'Phone'        => $this->getPhone(),
             'RecordTypeId' => $this->getRedordTypeId(),
-        ];
+        );
     }
 
-} 
+}

@@ -14,4 +14,4 @@ abstract class AbstractObject implements ObjectInterface, ArraySerializable
      */
     abstract public function asArray();
 
-} 
+}

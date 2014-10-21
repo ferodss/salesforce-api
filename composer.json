@@ -10,7 +10,9 @@
         "homepage": "http://ferodss.github.io"
     }],
     "require": {
-        "guzzlehttp/guzzle": "~4.0",
+        "php": ">=5.3.3",
+        "ext-curl": "*",
+        "guzzlehttp/guzzle": "~3.7",
         "symfony/event-dispatcher": "~2.5",
         "psr/log": "~1"
     },

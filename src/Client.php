@@ -177,7 +177,7 @@ class Client
      */
     public function getRestAuthorizationHeader()
     {
-        return [Client::REST_SESSION_HEADER => $this->getSessionId()];
+        return array(Client::REST_SESSION_HEADER => $this->getSessionId());
     }
 
     /**
@@ -309,4 +309,4 @@ class Client
         $this->soapClient->setLocation($this->loginResult->getServerUrl());
     }
 
-} 
+}

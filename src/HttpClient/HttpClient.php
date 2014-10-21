@@ -1,9 +1,9 @@
 <?php
 namespace Salesforce\HttpClient;
 
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Exception\RequestException;
+use Guzzle\Http\ClientInterface;
+use Guzzle\Http\Client as GuzzleClient;
+use Guzzle\Http\Exception\RequestException;
 
 /**
  * Perform requests on Salesforce API
@@ -16,16 +16,16 @@ class HttpClient implements HttpClientInterface
     /**
      * @var array
      */
-    protected $options = [
+    protected $options = array(
         'base_url'   => '',
         'timeout'    => 10,
         'user_agent' => 'PHP Salesforce API',
-    ];
+    );
 
     /**
      * @var array
      */
-    protected $headers = [];
+    protected $headers = array();
 
     /**
      * @var ClientInterface
@@ -41,12 +41,7 @@ class HttpClient implements HttpClientInterface
     {
         $this->options = array_merge($this->options, $options);
 
-        $client = $client ?: new GuzzleClient([
-            'base_url' => $this->options['base_url'],
-            'defaults' => [
-                'headers' => $this->options
-            ]
-        ]);
+        $client = $client ?: new GuzzleClient($this->options['base_url'], $this->options);
 
         $this->client = $client;
         $this->clearHeaders();
@@ -98,11 +93,11 @@ class HttpClient implements HttpClientInterface
      */
     public function clearHeaders()
     {
-        $this->headers = [
+        $this->headers = array(
             'Accept'       => 'application/xml',
             'Content-Type' => 'application/xml',
             'User-Agent'   => $this->options['user_agent'],
-        ];
+        );
     }
 
     /**
@@ -136,17 +131,15 @@ class HttpClient implements HttpClientInterface
      * @param string $path
      * @param null   $body
      *
-     * @return \GuzzleHttp\Message\RequestInterface
+     * @return \Guzzle\Http\Message\RequestInterface
      */
     protected function createRequest($httpMethod, $path, $body = null)
     {
         return $this->client->createRequest(
             $httpMethod,
             $path,
-            [
-                'headers' => $this->headers,
-                'body'    => $body,
-            ]
+            $this->headers,
+            $body
         );
     }
 

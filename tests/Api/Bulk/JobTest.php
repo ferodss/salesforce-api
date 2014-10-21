@@ -35,10 +35,10 @@ class JobTest extends \PHPUnit_Framework_TestCase
 
     public function operationDataProvider()
     {
-        return [
-            [Job::OPERATION_INSERT],
-            [Job::OPERATION_UPSERT],
-        ];
+        return array(
+            array(Job::OPERATION_INSERT),
+            array(Job::OPERATION_UPSERT),
+        );
     }
 
     /**
@@ -63,12 +63,12 @@ class JobTest extends \PHPUnit_Framework_TestCase
 
     public function jobStatesDataProvider()
     {
-        return [
-            ['Open'],
-            ['Close'],
-            ['Aborted'],
-            ['Failed'],
-        ];
+        return array(
+            array('Open'),
+            array('Close'),
+            array('Aborted'),
+            array('Failed'),
+        );
     }
 
     /**
@@ -208,7 +208,7 @@ class JobTest extends \PHPUnit_Framework_TestCase
     protected function getObjectMock()
     {
         return $this->getMockBuilder('Salesforce\Objects\AbstractObject')
-            ->setMethods(['asArray', 'getObjectType'])
+            ->setMethods(array('asArray', 'getObjectType'))
             ->getMock();
     }
 

@@ -48,9 +48,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function apiObjectsDataProvider()
     {
-        return [
-            ['bulk', 'Salesforce\Api\Bulk'],
-        ];
+        return array(
+            array('bulk', 'Salesforce\Api\Bulk'),
+        );
     }
 
     /**
@@ -121,31 +121,27 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function getHttpClientMock()
     {
-        $methods = [
+        $methods = array(
             'post', 'request', 'setOption', 'getOption', 'setHeaders', 'getHeaders',
-        ];
+        );
 
         return $this->getMock('Salesforce\HttpClient\HttpClientInterface', $methods);
     }
 
     public function getSoapClientMock()
     {
-        $methods = [
-            'authenticate', 'setLocation'
-        ];
+        $methods = array('authenticate', 'setLocation');
 
         return $this->getMockBuilder('Salesforce\Soap\SoapClientInterface')
             ->setMethods($methods)
             ->disableOriginalConstructor()
-            ->setConstructorArgs([$this->getWSDLPath()])
+            ->setConstructorArgs(array($this->getWSDLPath()))
             ->getMock();
     }
 
     public function getLoginResultMock()
     {
-        $methods = [
-            'getServerUrl', 'getSessionId',
-        ];
+        $methods = array('getServerUrl', 'getSessionId');
 
         return $this->getMockBuilder('Salesforce\Soap\Result\LoginResult')
             ->setMethods($methods)

@@ -39,7 +39,7 @@ class Batch extends XmlEntity
      *
      * @var AbstractObject[]
      */
-    protected $data = [];
+    protected $data = array();
 
     /**
      * Set the Batch ID

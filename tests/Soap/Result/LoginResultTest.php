@@ -29,15 +29,15 @@ class LoginResultTest extends \PHPUnit_Framework_TestCase
 
     public function loginInformationDataProvider()
     {
-        return [
-            ['metadataServerUrl', 'https://na1-api.salesforce.com/services/Soap/m/32.0'],
-            ['passwordExpired', ''],
-            ['sandbox', 1],
-            ['serverUrl', 'https://na1-api.salesforce.com/services/Soap/m/32.0'],
-            ['sessionId', uniqid()],
-            ['userId', uniqid()],
-            ['userInfo', new \stdClass()]
-        ];
+        return array(
+            array('metadataServerUrl', 'https://na1-api.salesforce.com/services/Soap/m/32.0'),
+            array('passwordExpired', ''),
+            array('sandbox', 1),
+            array('serverUrl', 'https://na1-api.salesforce.com/services/Soap/m/32.0'),
+            array('sessionId', uniqid()),
+            array('userId', uniqid()),
+            array('userInfo', new \stdClass()),
+        );
     }
 
     /**

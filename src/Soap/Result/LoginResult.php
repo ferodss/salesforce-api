@@ -96,4 +96,5 @@ class LoginResult
 
         return $matches['instance'];
     }
-} 
+
+}
