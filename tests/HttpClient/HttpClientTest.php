@@ -8,7 +8,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldBeAbleToPassOptionsToConstructor()
     {
-        $options = ['timeout' => 60];
+        $options = array('timeout' => 60);
         $httpClient = new HttpClient($options);
 
         $this->assertEquals($options['timeout'], $httpClient->getOption('timeout'));
@@ -34,7 +34,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
     public function testShouldBeAbleAddHeader()
     {
         $httpClient = new HttpClient();
-        $httpClient->setHeaders(['Foo' => 'Bar']);
+        $httpClient->setHeaders(array('Foo' => 'Bar'));
 
         $headers = $httpClient->getHeaders();
 
@@ -48,7 +48,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
         $client = $this->getBrowserMock();
 
-        $httpClient = new HttpClient([], $client);
+        $httpClient = new HttpClient(array(), $client);
         $httpClient->post($path, $body);
     }
 
@@ -59,7 +59,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
         $client = $this->getBrowserMock();
 
-        $httpClient = new HttpClient([], $client);
+        $httpClient = new HttpClient(array(), $client);
         $httpClient->request($path, $body, 'HEAD');
     }
 
