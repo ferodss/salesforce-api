@@ -34,7 +34,7 @@ abstract class XmlEntity implements XmlSerializable
             $method = 'set' . ucfirst($attr);
 
             if (method_exists($this, $method)) {
-                call_user_func([$this, $method], (string) $xml->{$attr});
+                call_user_func(array($this, $method), (string) $xml->{$attr});
             }
         }
     }
