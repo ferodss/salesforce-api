@@ -4,6 +4,9 @@ namespace Salesforce\Api;
 use Salesforce\Client;
 use Salesforce\Api\Bulk\Job;
 use Salesforce\HttpClient\Message\ResponseMediator;
+use Salesforce\Event\ResponseEvent;
+use Salesforce\Event\CreateJobEvent;
+use Salesforce\Event\CreateBatchEvent;
 
 /**
  * Salesforce Bulk API wrapper
@@ -114,6 +117,9 @@ class Bulk
      */
     protected function flushJob()
     {
+        $requestEvent = new CreateJobEvent($this->client->getRestEndpoint() . 'job', $this->job->asXML());
+        $this->client->dispatch(Events::CREATE_JOB, $requestEvent);
+
         switch ($this->job->getOperation()) {
             case Job::OPERATION_INSERT:
             case Job::OPERATION_UPSERT:
@@ -122,6 +128,12 @@ class Bulk
         }
 
         $response = ResponseMediator::getContent($response);
+
+        $this->client->dispatch(
+            Events::RESPONSE,
+            new ResponseEvent($requestEvent, $response)
+        );
+
         $this->job->fromXml($response);
     }
 
@@ -134,9 +146,19 @@ class Bulk
     {
         $batches = $this->job->getBatches();
         foreach ($batches as $i => $batch) {
-            $response = $this->httpClient->post("job/{$this->job->getId()}/batch", $batch->asXML());
+            $url = sprintf('job/%d/batch', $this->job->getId());
 
+            $requestEvent = new CreateBatchEvent($this->client->getRestEndpoint() . $url, $batch->asXML());
+            $this->client->dispatch(Events::CREATE_BATCH, $requestEvent);
+
+            $response = $this->httpClient->post($url, $batch->asXML());
             $response = ResponseMediator::getContent($response);
+
+            $this->client->dispatch(
+                Events::RESPONSE,
+                new ResponseEvent($requestEvent, $response)
+            );
+
             $batches[$i]->fromXml($response);
         }
     }

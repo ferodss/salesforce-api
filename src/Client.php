@@ -6,6 +6,11 @@ use Salesforce\HttpClient\HttpClient;
 use Salesforce\HttpClient\HttpClientInterface;
 use Salesforce\Exception\LoginFaultException;
 use Salesforce\Soap\Result\LoginResult;
+use Salesforce\Plugin\LogRequestsPlugin;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\Event;
+use Psr\Log\LoggerInterface;
 
 /**
  * Salesforce API Client
@@ -64,6 +69,16 @@ class Client
     protected $restEndpoint;
 
     /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
      * Instantiate a new Salesforce client
      *
      * @param string                   $wsdl
@@ -76,6 +91,23 @@ class Client
         if (null !== $httpClient) {
             $this->httpClient = $httpClient;
         }
+    }
+
+    /**
+     * Enable logging
+     *
+     * @param LoggerInterface $logger
+     *
+     * @return Client
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+
+        $logPlugin = new LogRequestsPlugin($this->logger);
+        $this->getEventDispatcher()->addSubscriber($logPlugin);
+
+        return $this;
     }
 
     /**
@@ -186,6 +218,55 @@ class Client
         }
 
         return $this->soapClient;
+    }
+
+    /**
+     * Get URL for REST requests
+     *
+     * @return string
+     */
+    public function getRestEndpoint()
+    {
+        return $this->restEndpoint;
+    }
+
+    /**
+     * Set event dispatcher
+     *
+     * @param EventDispatcherInterface $eventDispatcher
+     */
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
+    /**
+     * Get event dispatcher
+     *
+     * If no event dispatcher is supplied, a new one is created
+     *
+     * @return EventDispatcherInterface
+     */
+    public function getEventDispatcher()
+    {
+        if (null == $this->eventDispatcher) {
+            $this->eventDispatcher = new EventDispatcher();
+        }
+
+        return $this->eventDispatcher;
+    }
+
+    /**
+     * Dispatch an event
+     *
+     * @param string $name  Name of event: see Events.php
+     * @param Event  $event Event object
+     *
+     * @return Event
+     */
+    public function dispatch($name, Event $event)
+    {
+        return $this->getEventDispatcher()->dispatch($name, $event);
     }
 
     /**
