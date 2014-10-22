@@ -146,7 +146,7 @@ class Bulk
     {
         $batches = $this->job->getBatches();
         foreach ($batches as $i => $batch) {
-            $url = sprintf('job/%d/batch', $this->job->getId());
+            $url = sprintf('job/%s/batch', $this->job->getId());
 
             $requestEvent = new CreateBatchEvent($this->client->getRestEndpoint() . $url, $batch->asXML());
             $this->client->dispatch(Events::CREATE_BATCH, $requestEvent);
