@@ -157,7 +157,8 @@ class Batch extends XmlEntity
 
             foreach ($object->asArray() as $name => $value) {
                 if (! empty($value)) {
-                    $sObject->addChild($name, $value);
+                    $child = $sObject->addChild($name);
+                    $child->value = $value;
                 }
             }
         }
