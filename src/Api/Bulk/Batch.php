@@ -18,7 +18,7 @@ class Batch extends XmlEntity
      *
      * @var int
      */
-    protected $batchSizeLimit = 200;
+    protected $batchSizeLimit = 1000;
 
     /**
      * The Batch ID
