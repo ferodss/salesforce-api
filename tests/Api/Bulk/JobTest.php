@@ -140,7 +140,7 @@ class JobTest extends \PHPUnit_Framework_TestCase
     {
         $job = new Job('Account');
 
-        for ($i = 0; $i < 201; $i++) {
+        for ($i = 0; $i < 1001; $i++) {
             $object = $this->getObjectMock();
             $object->method('getObjectType')
                 ->willReturn('Account');
