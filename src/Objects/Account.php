@@ -11,6 +11,13 @@ class Account extends AbstractObject
 {
 
     /**
+     * Name of the account
+     *
+     * @var string
+     */
+    protected $name;
+
+    /**
      * Phone number for a account
      *
      * @var string
@@ -23,6 +30,30 @@ class Account extends AbstractObject
      * @var string
      */
     protected $recordTypeId;
+
+    /**
+     * Set the name of the account
+     *
+     * @param string $name
+     *
+     * @return Account
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get the name of the account
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 
     /**
      * Set the phone number for a account
@@ -86,6 +117,7 @@ class Account extends AbstractObject
     public function asArray()
     {
         return array(
+            'Name'         => $this->getName(),
             'Phone'        => $this->getPhone(),
             'RecordTypeId' => $this->getRecordTypeId(),
         );
