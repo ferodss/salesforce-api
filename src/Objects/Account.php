@@ -67,7 +67,7 @@ class Account extends AbstractObject
      *
      * @return string
      */
-    public function getRedordTypeId()
+    public function getRecordTypeId()
     {
         return $this->recordTypeId;
     }
@@ -87,7 +87,7 @@ class Account extends AbstractObject
     {
         return array(
             'Phone'        => $this->getPhone(),
-            'RecordTypeId' => $this->getRedordTypeId(),
+            'RecordTypeId' => $this->getRecordTypeId(),
         );
     }
 
