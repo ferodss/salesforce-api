@@ -4,6 +4,8 @@ namespace Salesforce\Plugin;
 use Salesforce\Api\Events;
 use Salesforce\Event\CreateBatchEvent;
 use Salesforce\Event\CreateJobEvent;
+use Salesforce\Event\QueryEvent;
+use Salesforce\Event\RequestEvent;
 use Salesforce\Event\ResponseEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Psr\Log\LoggerInterface;
@@ -77,6 +79,22 @@ class LogRequestsPlugin implements EventSubscriberInterface
     }
 
     /**
+     * Log each Query sent to Salesforce API
+     *
+     * @param QueryEvent $event
+     *
+     * @return void
+     */
+    public function onQuery(QueryEvent $event)
+    {
+        $this->logger->info(sprintf(
+            '[salesforce-api] Query (%s): %s',
+            $event->getUrl(),
+            http_build_query($event->getQueryString())
+        ));
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
@@ -85,6 +103,7 @@ class LogRequestsPlugin implements EventSubscriberInterface
             Events::CREATE_JOB   => 'onCreateJob',
             Events::CREATE_BATCH => 'onCreateBatch',
             Events::RESPONSE     => 'onClientResponse',
+            Events::QUERY        => 'onQuery',
         );
     }
 

@@ -1,7 +1,6 @@
 <?php
 namespace Salesforce;
 
-use Salesforce\Api\Bulk;
 use Salesforce\HttpClient\HttpClient;
 use Salesforce\HttpClient\HttpClientInterface;
 use Salesforce\Exception\LoginFaultException;
@@ -121,7 +120,10 @@ class Client
     {
         switch ($name) {
             case 'bulk':
-                $api = new Bulk($this);
+                $api = new Api\Bulk($this);
+                break;
+            case 'query':
+                $api = new Api\Query($this);
                 break;
 
             default:
@@ -228,6 +230,16 @@ class Client
     public function getRestEndpoint()
     {
         return $this->restEndpoint;
+    }
+
+    /**
+     * Get the server instance, e.g. ‘eu1’ or ‘cs7’
+     *
+     * @return string
+     */
+    public function getServerInstance()
+    {
+        return $this->getLoginResult()->getServerInstance();
     }
 
     /**

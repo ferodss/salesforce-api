@@ -20,7 +20,10 @@ final class Events
     const CREATE_JOB = 'salesforce.bulk.create_job';
 
     /**
+     * The salesforce.bulk.create_batch event is thrown each time a job batch request
+     * is sent to Salesforce Bulk API
      *
+     * The event listener receives an Salesforce\Event\CreateBatchEvent instance
      *
      * @var string
      */
@@ -35,5 +38,13 @@ final class Events
      * @var string
      */
     const RESPONSE = 'salesforce.response';
+
+    /**
+     * The salesforce.query event is thrown each time a Query request
+     * is sent to Salesforce API
+     *
+     * The event listener receives a Salesforce\Event\RequestEvent instance
+     */
+    const QUERY = 'salesforce.query';
 
 }

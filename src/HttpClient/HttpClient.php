@@ -17,9 +17,13 @@ class HttpClient implements HttpClientInterface
      * @var array
      */
     protected $options = array(
-        'base_url'   => '',
-        'timeout'    => 10,
-        'user_agent' => 'PHP Salesforce API',
+        'base_url'     => '',
+        'timeout'      => 10,
+
+        'accept'       => 'application/xml',
+        'content_type' => 'application/xml',
+
+        'user_agent'   => 'PHP Salesforce API',
     );
 
     /**
@@ -45,6 +49,24 @@ class HttpClient implements HttpClientInterface
 
         $this->client = $client;
         $this->clearHeaders();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setBaseUrl($url)
+    {
+        $this->client->setBaseUrl($url);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getBaseUrl()
+    {
+        return $this->client->getBaseUrl();
     }
 
     /**
@@ -94,10 +116,18 @@ class HttpClient implements HttpClientInterface
     public function clearHeaders()
     {
         $this->headers = array(
-            'Accept'       => 'application/xml',
-            'Content-Type' => 'application/xml',
+            'Accept'       => $this->options['accept'],
+            'Content-Type' => $this->options['content_type'],
             'User-Agent'   => $this->options['user_agent'],
         );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function get($path, array $parameters = array())
+    {
+        return $this->request($path, null, 'GET', array('query' => $parameters));
     }
 
     /**
@@ -111,9 +141,9 @@ class HttpClient implements HttpClientInterface
     /**
      * {@inheritDoc}
      */
-    public function request($path, $body = null, $httpMethod = 'GET')
+    public function request($path, $body = null, $httpMethod = 'GET', array $options = array())
     {
-        $request = $this->createRequest($httpMethod, $path, $body);
+        $request = $this->createRequest($httpMethod, $path, $body, $options);
 
         try {
             $response = $this->client->send($request);
@@ -129,17 +159,19 @@ class HttpClient implements HttpClientInterface
      *
      * @param string $httpMethod
      * @param string $path
-     * @param null   $body
+     * @param mixed  $body
+     * @param array  $options
      *
      * @return \Guzzle\Http\Message\RequestInterface
      */
-    protected function createRequest($httpMethod, $path, $body = null)
+    protected function createRequest($httpMethod, $path, $body = null, array $options = array())
     {
         return $this->client->createRequest(
             $httpMethod,
             $path,
             $this->headers,
-            $body
+            $body,
+            $options
         );
     }
 

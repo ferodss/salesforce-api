@@ -17,7 +17,7 @@ class ResponseEvent extends Event
     protected $requestEvent;
 
     /**
-     * @var \SimpleXMLElement
+     * @var string
      */
     protected $response;
 
@@ -25,7 +25,7 @@ class ResponseEvent extends Event
      * @param RequestEvent $requestEvent
      * @param mixed        $response
      */
-    public function __construct(RequestEvent $requestEvent, \SimpleXMLElement $response)
+    public function __construct(RequestEvent $requestEvent, $response)
     {
         $this->requestEvent = $requestEvent;
         $this->response     = $response;
@@ -44,7 +44,7 @@ class ResponseEvent extends Event
      */
     public function getResponse()
     {
-        return $this->response->asXML();
+        return $this->response;
     }
 
 }

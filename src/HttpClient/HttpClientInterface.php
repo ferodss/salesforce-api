@@ -10,6 +10,18 @@ interface HttpClientInterface
 {
 
     /**
+     * Send a GET request
+     *
+     * @param string $path       Request path
+     * @param array  $parameters GET parameters
+     *
+     * @return \Guzzle\Http\Message\Response
+     *
+     * @throws \LogicException
+     */
+    public function get($path, array $parameters = array());
+
+    /**
      * Send a POST request
      *
      * @param string $path    Request path
@@ -27,12 +39,13 @@ interface HttpClientInterface
      * @param string $path          Request path
      * @param mixed  $body          Request body
      * @param string $httpMethod    HTTP method to use
+     * @param array  $options
      *
      * @return \Guzzle\Http\Message\Response
      *
      * @throws \LogicException
      */
-    public function request($path, $body = null, $httpMethod = 'GET');
+    public function request($path, $body = null, $httpMethod = 'GET', array $options = array());
 
     /**
      * Change an option value
@@ -69,5 +82,21 @@ interface HttpClientInterface
      * @return array
      */
     public function getHeaders();
+
+    /**
+     * Set the base URL for next HTTP calls
+     *
+     * @param string $url
+     *
+     * @return HttpClientInterface
+     */
+    public function setBaseUrl($url);
+
+    /**
+     * Get the base URL of HTTP client
+     *
+     * @return string
+     */
+    public function getBaseUrl();
 
 }
