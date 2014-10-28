@@ -131,7 +131,7 @@ class Bulk
 
         $this->client->dispatch(
             Events::RESPONSE,
-            new ResponseEvent($requestEvent, $response)
+            new ResponseEvent($requestEvent, $response->asXML())
         );
 
         $this->job->fromXml($response);
@@ -156,7 +156,7 @@ class Bulk
 
             $this->client->dispatch(
                 Events::RESPONSE,
-                new ResponseEvent($requestEvent, $response)
+                new ResponseEvent($requestEvent, $response->asXML())
             );
 
             $batches[$i]->fromXml($response);
