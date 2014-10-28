@@ -122,7 +122,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function getHttpClientMock()
     {
         $methods = array(
-            'post', 'request', 'setOption', 'getOption', 'setHeaders', 'getHeaders',
+            'get', 'post', 'request', 'setOption', 'getOption', 'setHeaders', 'getHeaders',
+            'setBaseUrl', 'getBaseUrl'
         );
 
         return $this->getMock('Salesforce\HttpClient\HttpClientInterface', $methods);
