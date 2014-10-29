@@ -4,6 +4,7 @@ namespace Salesforce\Plugin;
 use Salesforce\Api\Events;
 use Salesforce\Event\CreateBatchEvent;
 use Salesforce\Event\CreateJobEvent;
+use Salesforce\Event\ErrorEvent;
 use Salesforce\Event\QueryEvent;
 use Salesforce\Event\RequestEvent;
 use Salesforce\Event\ResponseEvent;
@@ -95,15 +96,33 @@ class LogRequestsPlugin implements EventSubscriberInterface
     }
 
     /**
+     * Log each request error
+     *
+     * @param ErrorEvent $event
+     *
+     * @return void
+     */
+    public function onError(ErrorEvent $event)
+    {
+        $this->logger->error(sprintf(
+            "[salesforce-api] Request: %s - %s\nError message: %s",
+            $event->getUrl(),
+            $event->getBody(),
+            $event->getMessage()
+        ));
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
         return array(
-            Events::CREATE_JOB   => 'onCreateJob',
-            Events::CREATE_BATCH => 'onCreateBatch',
-            Events::RESPONSE     => 'onClientResponse',
-            Events::QUERY        => 'onQuery',
+            Events::CREATE_JOB    => 'onCreateJob',
+            Events::CREATE_BATCH  => 'onCreateBatch',
+            Events::RESPONSE      => 'onClientResponse',
+            Events::QUERY         => 'onQuery',
+            Events::REQUEST_ERROR => 'onError',
         );
     }
 

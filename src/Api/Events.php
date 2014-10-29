@@ -47,4 +47,10 @@ final class Events
      */
     const QUERY = 'salesforce.query';
 
+    /**
+     * The salesforce.request_error event is thrown each time a HttpClient error happen
+     *
+     * The event listener receives a Salesforce\Event\ErrorEvent instance
+     */
+    const REQUEST_ERROR = 'salesforce.request_error';
 }

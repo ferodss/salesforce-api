@@ -7,6 +7,7 @@ use Salesforce\HttpClient\Message\ResponseMediator;
 use Salesforce\Event\ResponseEvent;
 use Salesforce\Event\CreateJobEvent;
 use Salesforce\Event\CreateBatchEvent;
+use Salesforce\Event\ErrorEvent;
 
 /**
  * Salesforce Bulk API wrapper
@@ -120,14 +121,16 @@ class Bulk
         $requestEvent = new CreateJobEvent($this->client->getRestEndpoint() . 'job', $this->job->asXML());
         $this->client->dispatch(Events::CREATE_JOB, $requestEvent);
 
-        switch ($this->job->getOperation()) {
-            case Job::OPERATION_INSERT:
-            case Job::OPERATION_UPSERT:
-                $response = $this->httpClient->post('job', $this->job->asXML());
-                break;
+        try {
+            $response = $this->httpClient->post('job', $this->job->asXML());
+            $response = ResponseMediator::getContent($response);
+        } catch (\LogicException $e) {
+            $this->client->dispatch(
+                Events::REQUEST_ERROR,
+                new ErrorEvent($this->httpClient->getBaseUrl(), $this->job->asXML(), $e->getMessage())
+            );
+            throw $e;
         }
-
-        $response = ResponseMediator::getContent($response);
 
         $this->client->dispatch(
             Events::RESPONSE,
