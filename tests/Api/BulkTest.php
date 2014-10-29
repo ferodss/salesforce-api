@@ -13,7 +13,14 @@ class BulkTest extends \PHPUnit_Framework_TestCase
     {
         $this->client = $this->getMockBuilder('Salesforce\Client')
             ->disableOriginalConstructor()
+            ->setMethods(array('getHttpClient', 'getServerInstance', 'isAuthenticated'))
             ->getMock();
+        $this->client->expects($this->once())
+            ->method('getHttpClient')
+            ->willReturn($this->getHttpClientMock());
+        $this->client->expects($this->once())
+            ->method('getServerInstance')
+            ->willReturn('cs21');
     }
 
     public function testShouldBeAbleToCreateAJob()
@@ -65,5 +72,19 @@ class BulkTest extends \PHPUnit_Framework_TestCase
         $bulkApi = new Bulk($this->client);
         $bulkApi->flush();
     }
+
+    public function getHttpClientMock()
+    {
+        $methods = array(
+            'get', 'post', 'request', 'setOption', 'getOption', 'setHeaders', 'getHeaders',
+            'setBaseUrl', 'getBaseUrl'
+        );
+
+        $mock = $this->getMock('Salesforce\HttpClient\HttpClientInterface', $methods);
+        $mock->expects($this->once())
+            ->method('setBaseUrl');
+
+        return $mock;
+    }
+
 }
- 

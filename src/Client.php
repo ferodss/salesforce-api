@@ -27,20 +27,6 @@ class Client
     const API_VERSION = '32.0';
 
     /**
-     * Salesforce REST API endpoint
-     *
-     * @var string
-     */
-    const REST_ENDPOINT_PATTERN = 'https://%s.salesforce.com/services/async/%s/';
-
-    /**
-     * Session header name for authorization
-     *
-     * @var string
-     */
-    const REST_SESSION_HEADER = 'X-SFDC-Session';
-
-    /**
      * @var string
      */
     protected $wsdl;
@@ -175,14 +161,6 @@ class Client
     }
 
     /**
-     * @return array
-     */
-    public function getRestAuthorizationHeader()
-    {
-        return array(Client::REST_SESSION_HEADER => $this->getSessionId());
-    }
-
-    /**
      * Returns the used http client
      *
      * @return HttpClientInterface
@@ -289,7 +267,6 @@ class Client
         $this->loginResult = $loginResult;
 
         $this->setSoapEndPoint();
-        $this->setRestEndopint();
     }
 
     /**
@@ -300,17 +277,6 @@ class Client
     protected function getLoginResult()
     {
         return $this->loginResult;
-    }
-
-    /**
-     * @return void
-     */
-    protected function setRestEndopint()
-    {
-        $this->restEndpoint = sprintf(self::REST_ENDPOINT_PATTERN,
-            $this->getLoginResult()->getServerInstance(),
-            self::API_VERSION
-        );
     }
 
     /**

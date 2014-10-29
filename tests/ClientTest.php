@@ -156,7 +156,14 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     protected function getClient()
     {
-        return new Client($this->getWSDLPath(), $this->getHttpClientMock());
+        $client = $this->getMockBuilder('Salesforce\Client')
+            ->setConstructorArgs(array($this->getWSDLPath(), $this->getHttpClientMock()))
+            ->setMethods(array('getServerInstance'))
+            ->getMock();
+        $client->method('getServerInstance')
+            ->willReturn('cs21');
+
+        return $client;
     }
 
 } 

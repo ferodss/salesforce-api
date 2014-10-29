@@ -18,6 +18,13 @@ class Bulk
 {
 
     /**
+     * Salesforce Bulk API endpoint
+     *
+     * @var string
+     */
+    const ENDPOINT_PATTERN = 'https://%s.salesforce.com/services/async/%s/';
+
+    /**
      * Salesforce API client
      *
      * @var Client
@@ -37,6 +44,11 @@ class Bulk
     protected $job;
 
     /**
+     * @var string
+     */
+    protected $endpoint;
+
+    /**
      * Instantiate a new Salesforce Bulk API
      *
      * @param Client $client
@@ -45,6 +57,21 @@ class Bulk
     {
         $this->client = $client;
         $this->httpClient = $client->getHttpClient();
+        $this->endpoint   = sprintf(
+            self::ENDPOINT_PATTERN,
+            $this->client->getServerInstance(),
+            Client::API_VERSION
+        );
+
+        $this->httpClient->setBaseUrl($this->endpoint);
+    }
+
+    /**
+     * @return array
+     */
+    public function getAuthorizationHeader()
+    {
+        return array('X-SFDC-Session' => $this->client->getSessionId());
     }
 
     /**
@@ -103,7 +130,7 @@ class Bulk
             throw new \LogicException('You must set a Job for this bulk');
         }
 
-        $this->httpClient->setHeaders($this->client->getRestAuthorizationHeader());
+        $this->httpClient->setHeaders($this->getAuthorizationHeader());
 
         $this->flushJob();
         $this->flushBatches();

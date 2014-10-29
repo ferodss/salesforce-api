@@ -14,7 +14,7 @@ class Query
      *
      * @var string
      */
-    const QUERY_ENDPOINT_PATTERN = 'https://%s.salesforce.com/services/data/v%s/';
+    const ENDPOINT_PATTERN = 'https://%s.salesforce.com/services/data/v%s/';
 
     /**
      * Salesforce API client
@@ -43,7 +43,7 @@ class Query
         $this->client     = $client;
         $this->httpClient = $client->getHttpClient();
         $this->endpoint   = sprintf(
-            self::QUERY_ENDPOINT_PATTERN,
+            self::ENDPOINT_PATTERN,
             $this->client->getServerInstance(),
             Client::API_VERSION
         );
@@ -54,7 +54,7 @@ class Query
     /**
      * @return array
      */
-    public function getRestAuthorizationHeader()
+    public function getAuthorizationHeader()
     {
         return array('Authorization' => 'Bearer ' . $this->client->getSessionId());
     }
@@ -73,7 +73,7 @@ class Query
         $requestEvent = new QueryEvent($this->endpoint . 'query', $queryString);
         $this->client->dispatch(Events::QUERY, $requestEvent);
 
-        $this->httpClient->setHeaders($this->getRestAuthorizationHeader());
+        $this->httpClient->setHeaders($this->getAuthorizationHeader());
         $response = $this->httpClient->get('query', $queryString);
         $response = ResponseMediator::getContent($response);
 
