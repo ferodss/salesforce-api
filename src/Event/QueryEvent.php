@@ -21,6 +21,7 @@ class QueryEvent extends RequestEvent
     public function __construct($url, $queryString)
     {
         parent::__construct($url, 'POST', null);
+        $this->queryString = $queryString;
     }
 
     /**
