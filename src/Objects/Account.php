@@ -32,6 +32,14 @@ class Account extends AbstractObject
     protected $recordTypeId;
 
     /**
+     * The ID of the user who currently owns this account.
+     * Default value is the user logged in to the API to perform the create.
+     *
+     * @var string
+     */
+    protected $ownerId;
+
+    /**
      * Set the name of the account
      *
      * @param string $name
@@ -104,6 +112,30 @@ class Account extends AbstractObject
     }
 
     /**
+     * Set the ID of the user who currently owns this account
+     *
+     * @param string $ownerId
+     *
+     * @return Account
+     */
+    public function setOwnerId($ownerId)
+    {
+        $this->ownerId = $ownerId;
+
+        return $this;
+    }
+
+    /**
+     * Get the ID of the user who currently owns this account
+     *
+     * @return string
+     */
+    public function getOwnerId()
+    {
+        return $this->ownerId;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getObjectType()
@@ -120,6 +152,7 @@ class Account extends AbstractObject
             'Name'         => $this->getName(),
             'Phone'        => $this->getPhone(),
             'RecordTypeId' => $this->getRecordTypeId(),
+            'OwnerId'      => $this->getOwnerId(),
         );
     }
 
